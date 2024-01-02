@@ -4,27 +4,37 @@ def login():
     st.title("Login")
     username = st.text_input("Usuário")
     password = st.text_input("Senha", type="password")
+    
     if st.button("Entrar"):
         st.success("Login bem-sucedido!")
+    
+    if st.button("Sign Up"):
+        st.session_state.page = "Sign Up"
 
 def cadastrar():
-    st.title("Cadastro")
+    st.title("Sign Up")
     new_username = st.text_input("Novo Usuário")
     new_password = st.text_input("Nova Senha", type="password")
     confirm_password = st.text_input("Confirmar Senha", type="password")
+    
     if new_password != confirm_password:
         st.error("As senhas não coincidem.")
-    elif st.button("Cadastrar"):
-        st.success("Cadastro realizado com sucesso!")
+    
+    if st.button("Sign Up"):
+        st.success("Nova conta cadastrada com sucesso!")
+    
+    if st.button("Login"):
+        st.session_state.page = "Login"
 
 def main():
     st.set_page_config(page_title='GADM')
 
-    choice = st.sidebar.radio("Escolha uma opção", ["Login", "Cadastro"])
+    if "page" not in st.session_state:
+        st.session_state.page = "Login"
 
-    if choice == "Login":
+    if st.session_state.page == "Login":
         login()
-    elif choice == "Cadastro":
+    elif st.session_state.page == "Sign Up":
         cadastrar()
 
 if __name__ == "__main__":

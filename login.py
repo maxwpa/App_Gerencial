@@ -19,13 +19,12 @@ def sign_up():
     if new_login and new_password != cfm_password:
         st.error('As senhas não coincidem')
 
-def main():
+def inicio():
     st.set_page_config(page_title='GDMA')
     col_one, col_two = st.columns(2)
     with col_one:
         login()
     with col_two:
         sign_up()
-        
-if __name__ == "__main__":
-    main()
+
+inicio()

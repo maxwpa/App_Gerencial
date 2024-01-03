@@ -1,8 +1,9 @@
 import streamlit as st
 
 codigo_de_acesso = st.text_input('Código de Acesso', type='password')
+entrar = st.button('Entrar')
 
-if codigo_de_acesso == 20210088628:
+if entrar and codigo_de_acesso == '20210088628':
     produto_comprado = st.text_input('Produto Comprado')
     data_da_compra = st.date_input('Data da Compra')
     preco_da_compra = st.number_input('Preço da Compra em Reais', step=0.01, format="%.2f")

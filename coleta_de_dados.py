@@ -11,45 +11,40 @@ def acesso():
 def coleta():
     segmentacao = ['Vestuário e Moda']
     segmento = st.selectbox('Segmento', segmentacao)
-    produtos = [
-    "Camisetas básicas",
-    'Calça Jeans',
-        'Jaqueta Jeans',
-        'Bermuda',
-        'Bermuda Jeans',
-    "Camisas Polo",
-    "Vestidos casuais",
-    "Calça social",
-    "Jaquetas de couro",
-    "Blazers",
-    "Saia lápis",
-    "Tênis esportivos",
-    "Calças de yoga/leggings",
-    "Camisetas estampadas",
-    "Vestidos de festa",
-    "Casacos de inverno",
-    "Camisolas",
-    "Camisetas de marca",
-    "Shorts jeans",
-    "Calças cargo",
-    "Suéteres",
-    "Vestidos florais",
-    "Saias plissadas",
-    "Camisas xadrez",
-    "Camisetas de bandas",
-    "Macacões",
-    "Roupas de banho",
-    "Calçados",
-    "Acessórios",
-        'Produtos de Beleza',
-        'Eletrónicos',
-    'Novo Produto']
-    def custom_sort_key(item):
-        return item if item != 'Novo Produto' else 'zzz'
-    produtos_ordenados = sorted(produtos, key=custom_sort_key)
-    produto_comprado = st.selectbox('Produto Comprado', produtos_ordenados)
-    if produto_comprado == 'Novo Produto':
-        novo_produto = st.text_input('Novo Produto')
+    
+    if segmento == 'Vestuário e Moda':
+        produtos = [
+        "Camiseta",
+        'Calça',
+            'Jaqueta',
+            'Bermuda',
+        "Camisas",
+        "Vestidos",
+        "Blazers",
+        "Saia",
+        "Casaco",
+        "Short",
+        "Suéter",
+            'Camisa de Bandas',
+        "Macacões",
+        "Calçados",
+        "Acessórios",
+            'Produtos de Beleza',
+            'Eletrónicos',
+        'Novo Produto']
+    
+        def custom_sort_key(item):
+            return item if item != 'Novo Produto' else 'zzz'
+        produtos_ordenados = sorted(produtos, key=custom_sort_key)
+        produto_comprado = st.selectbox('Produto Comprado', produtos_ordenados)
+        if produto_comprado == 'Novo Produto':
+            novo_produto = st.text_input('Novo Produto')
+        elif: produto_comprado == 'Calçados':
+            tamanho = st.number_imput('Tamanho do Calçado')
+            nicho = ['Masculino', 'Feminino', 'Unissex']
+            genero = st.selectbox('Gênero', nicho)
+
+        
     data_da_compra = st.date_input('Data da Compra')
     preco_da_compra = st.number_input('Preço da Compra em Reais', step=0.01, format="%.2f")
     custos_adicionais = st.number_input('Custos Adicionais', step=0.01, format="%.2f")

@@ -9,7 +9,38 @@ def acesso():
         st.warning("O código de acesso inserido não foi aceito, tente novamente.")
 
 def coleta():
-    produto_comprado = st.text_input('Produto Comprado')
+    produtos = [
+    "Camisetas básicas",
+    "Jeans",
+    "Camisas Polo",
+    "Vestidos casuais",
+    "Calças sociais",
+    "Jaquetas de couro",
+    "Blazers",
+    "Saia lápis",
+    "Tênis esportivos",
+    "Calças de yoga/leggings",
+    "Camisetas estampadas",
+    "Vestidos de festa",
+    "Casacos de inverno",
+    "Camisolas",
+    "Camisetas de marca",
+    "Shorts jeans",
+    "Calças cargo",
+    "Suéteres",
+    "Vestidos florais",
+    "Saias plissadas",
+    "Calçados de salto alto",
+    "Camisas xadrez",
+    "Camisetas de bandas",
+    "Macacões",
+    "Roupas de banho",
+    "Calçados",
+    "Acessórios", 
+    'Novo Produto']
+    produto_comprado = st.selectbox('Produto Comprado', produtos)
+    if produto_comprado == 'Novo Produto':
+        novo_produto = st.text_input('Novo Produto')
     data_da_compra = st.date_input('Data da Compra')
     preco_da_compra = st.number_input('Preço da Compra em Reais', step=0.01, format="%.2f")
     custos_adicionais = st.number_input('Custos Adicionais', step=0.01, format="%.2f")
@@ -35,7 +66,10 @@ def coleta():
     fornecedor = st.text_input('Fornecedor')
 
     if (
-        produto_comprado 
+        if produto_comprado != 'Novo Produto':
+            produto_comprado
+        else:
+            novo_produto
         and data_da_compra 
         and preco_da_compra 
         and custos_adicionais 

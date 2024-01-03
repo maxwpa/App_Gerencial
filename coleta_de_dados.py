@@ -37,8 +37,10 @@ def coleta():
             return item if item != 'Novo Produto' else 'zzz'
         produtos_ordenados = sorted(produtos, key=custom_sort_key)
         produto_comprado = st.selectbox('Produto Comprado', produtos_ordenados)
+        
         if produto_comprado == 'Novo Produto':
             novo_produto = st.text_input('Novo Produto')
+        
         elif produto_comprado == 'Calçados':
             calcados = [
                     "Tênis esportivo",
@@ -61,15 +63,18 @@ def coleta():
             def custom_sort_key(item1):
                 return item1 if item1 != 'Novo Calçado' else 'zzz'
             calcados_ordenados = sorted(calcados, key=custom_sort_key)
-            calcado_comprado = st.selectbox('Calçado Comprado', calcados_ordenados)
-            if calcado_comprado == 'Novo Calçado':
-                novo_calcado = st.text_input('Novo Calçado')
+            tipo_de_calcado = st.selectbox('Calçado Comprado', calcados_ordenados)
+            
+            if tipo_de_calcado == 'Novo Calçado':
+                novo_tipo_calcado = st.text_input('Novo Calçado')
 
-            tamanho = st.number_imput('Tamanho do Calçado')
+            tamanho = st.number_input('Tamanho do Calçado', step=1, format="%d")
             nicho = ['Masculino', 'Feminino', 'Unissex']
             genero = st.selectbox('Gênero', nicho)
+            faixa = ['Adulto', 'Infantil']
+            idade = st.selectbox('Público', faixa)
 
-        
+    quantidade_comprada = st.number_input("Quantidade Comprada", step=1, format="%d")
     data_da_compra = st.date_input('Data da Compra')
     preco_da_compra = st.number_input('Preço da Compra em Reais', step=0.01, format="%.2f")
     custos_adicionais = st.number_input('Custos Adicionais', step=0.01, format="%.2f")
@@ -79,6 +84,12 @@ def coleta():
 
     pagamento = ['À Vista', 'Parcelamento']
     forma_de_pagamento = st.selectbox("Forma de Pagamento", pagamento)
+    
+    data_de_pagamento = st.date_input('Data do Pagamento À Vista ou da Última Parcela')
+    
+    fornecerdor = st.text_input('Fornecedor')
+    
+    data_de_entrega = st.date_input('Prazo de Entrega')
 
     if (
         (produto_comprado != 'Novo Produto' or novo_produto)
@@ -89,6 +100,7 @@ def coleta():
         and data_de_pagamento 
         and quantidade_comprada 
         and fornecedor
+        and data_de_entrega
     ):
         if forma_de_pagamento == 'À Vista':
             custo_final = preco_da_compra + custos_adicionais

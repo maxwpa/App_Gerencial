@@ -1,32 +1,13 @@
 import streamlit as st
 
-if "logged_in" not in st.session_state:
-    st.session_state.logged_in = False
-
-st.markdown(
-    """
-    <script>
-        // Função para verificar se a tecla pressionada é Enter e, nesse caso, clicar no botão
-        function handleEnter(event) {
-            if (event.keyCode === 13) {
-                document.getElementById("entrarButton").click();
-            }
-        }
-    </script>
-    """,
-    unsafe_allow_html=True,
-)
-
 def acesso():
     codigo_de_acesso = st.text_input('Código de Acesso', type='password')
-    entrar_button = st.button('Entrar', key="entrarButton", on_click=handleEnter)
-    
-    if entrar_button or st.session_state.logged_in:
-        if codigo_de_acesso == "20210088628":
-            st.session_state.logged_in = True
-            st.success("Login bem-sucedido!")
-        elif entrar_button:
-            st.warning("O código de acesso inserido não foi aceito, tente outro.")
+    entrar = st.button('Entrar')
+    if entrar and codigo_de_acesso == "20210088628":
+        st.session_state.logged_in = True
+        st.success("Login bem-sucedido!")
+    elif entrar:
+        st.warning("O código de acesso inserido não foi aceito, tente outro.")
 
 def coleta():
     produto_comprado = st.text_input('Produto Comprado')
@@ -41,7 +22,7 @@ def coleta():
     forma_de_pagamento = st.selectbox("Forma de Pagamento", pagamento)
 
     if forma_de_pagamento == 'À Vista':
-        parcelamento = 1
+        parcelamento = 0
         valor_de_entrada = preco_da_compra
         valor_das_parcelas = 0
     else:
@@ -78,7 +59,10 @@ def coleta():
     else:
         st.warning("Preencha todos os campos em branco antes de cadastrar a compra.")
 
-acesso()
+if "logged_in" not in st.session_state:
+    st.session_state.logged_in = False
 
-if st.session_state.logged_in:
+if not st.session_state.logged_in:
+    acesso()
+else:
     coleta()

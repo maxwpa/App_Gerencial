@@ -3,18 +3,23 @@ import streamlit as st
 def acesso():
     codigo_de_acesso = st.text_input('Código de Acesso', type='password')
     entrar = st.button('Entrar')
-    if codigo_de_acesso == "20210088628" and entrar:
+    if codigo_de_acesso == "2" and entrar:
         st.session_state.logged_in = True
     elif entrar:
         st.warning("O código de acesso inserido não foi aceito, tente novamente.")
 
 def coleta():
+    segmentacao = ['Vestuário e Moda']
+    segmento = st.selectbox('Segmento', segmentacao)
     produtos = [
     "Camisetas básicas",
-    "Jeans",
+    'Calça Jeans',
+        'Jaqueta Jeans',
+        'Bermuda',
+        'Bermuda Jeans',
     "Camisas Polo",
     "Vestidos casuais",
-    "Calças sociais",
+    "Calça social",
     "Jaquetas de couro",
     "Blazers",
     "Saia lápis",
@@ -30,15 +35,19 @@ def coleta():
     "Suéteres",
     "Vestidos florais",
     "Saias plissadas",
-    "Calçados de salto alto",
     "Camisas xadrez",
     "Camisetas de bandas",
     "Macacões",
     "Roupas de banho",
     "Calçados",
-    "Acessórios", 
+    "Acessórios",
+        'Produtos de Beleza',
+        'Eletrónicos',
     'Novo Produto']
-    produto_comprado = st.selectbox('Produto Comprado', produtos)
+    def custom_sort_key(item):
+        return item if item != 'Novo Produto' else 'zzz'
+    produtos_ordenados = sorted(produtos, key=custom_sort_key)
+    produto_comprado = st.selectbox('Produto Comprado', produtos_ordenados)
     if produto_comprado == 'Novo Produto':
         novo_produto = st.text_input('Novo Produto')
     data_da_compra = st.date_input('Data da Compra')

@@ -40,6 +40,31 @@ def coleta():
         if produto_comprado == 'Novo Produto':
             novo_produto = st.text_input('Novo Produto')
         elif: produto_comprado == 'Calçados':
+            calcados = [
+                    "Tênis esportivo",
+                    "Sapatênis",
+                    "Sapato social",
+                    "Chinelo",
+                    "Sandália rasteira",
+                    "Sapato de salto alto",
+                    "Chuteira",
+                    "Alpargata",
+                    "Mocassim",
+                    "Sapatilha",
+                    "Bota de cano alto",
+                    "Tênis casual",
+                    "Chinelo slide",
+                    "Tênis de corrida",
+                    "Bota chelsea",
+                    'Novo Calçado'
+                ]
+            def custom_sort_key(item1):
+                return item1 if item1 != 'Novo Calçado' else 'zzz'
+            calcados_ordenados = sorted(calcados, key=custom_sort_key)
+            calcado_comprado = st.selectbox('Calçado Comprado', calcados_ordenados)
+            if calcado_comprado == 'Novo Calçado':
+                novo_calcado = st.text_input('Novo Calçado')
+
             tamanho = st.number_imput('Tamanho do Calçado')
             nicho = ['Masculino', 'Feminino', 'Unissex']
             genero = st.selectbox('Gênero', nicho)

@@ -51,25 +51,8 @@ def coleta():
     pagamento = ['À Vista', 'Parcelamento']
     forma_de_pagamento = st.selectbox("Forma de Pagamento", pagamento)
 
-    if forma_de_pagamento == 'À Vista':
-        parcelamento = 0
-        valor_de_entrada = preco_da_compra
-        valor_das_parcelas = 0
-    else:
-        parcelas = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]
-        parcelamento = st.selectbox("Número de Parcelas", parcelas)
-        valor_de_entrada = st.number_input('Valor Pago na Entrada', step=0.01, format="%.2f")
-        valor_das_parcelas = st.number_input('Valor das Parcelas', step=0.01, format="%.2f")
-
-    data_de_pagamento = st.date_input('Data de Pagamento (última parcela)')
-    quantidade_comprada = st.number_input("Quantidade Comprada", step=1, format="%d")
-    fornecedor = st.text_input('Fornecedor')
-
     if (
-        if produto_comprado != 'Novo Produto':
-            produto_comprado
-        else:
-            novo_produto
+        (produto_comprado != 'Novo Produto' or novo_produto)
         and data_da_compra 
         and preco_da_compra 
         and custos_adicionais 
@@ -99,3 +82,4 @@ if not st.session_state.logged_in:
     acesso()
 else:
     coleta()
+

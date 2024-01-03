@@ -1,9 +1,14 @@
 import streamlit as st
 
-codigo_de_acesso = st.text_input('Código de Acesso', type='password')
-entrar = st.button('Entrar')
+def acesso():
+    codigo_de_acesso = st.text_input('Código de Acesso', type='password')
+    entrar = st.button('Entrar')
+    if entrar and codigo_de_acesso == "20210088628":
+        st.session_state.logged_in = True
+    #else:
+    #    st.warning("O código de acesso inserido não foi aceito, tente outro.")
 
-if entrar and codigo_de_acesso == '20210088628':
+def coleta():
     produto_comprado = st.text_input('Produto Comprado')
     data_da_compra = st.date_input('Data da Compra')
     preco_da_compra = st.number_input('Preço da Compra em Reais', step=0.01, format="%.2f")
@@ -42,5 +47,8 @@ if entrar and codigo_de_acesso == '20210088628':
     else:
         st.warning("Preencha todos os campos em branco antes de cadastrar a compra.")
         
+if not st.session_state.logged_in:
+    acesso()
+    st.warning("O código de acesso inserido não foi aceito, tente outro.")
 else:
-    st.warning("O código de acesso inserido não foi aceito.")
+    coleta()

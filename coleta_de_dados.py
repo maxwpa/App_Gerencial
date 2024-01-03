@@ -30,7 +30,7 @@ def coleta():
         valor_de_entrada = st.number_input('Valor Pago na Entrada', step=0.01, format="%.2f")
         valor_das_parcelas = st.number_input('Valor das Parcelas', step=0.01, format="%.2f")
 
-    data_de_pagamento = st.date_input('Data de Pagamento')
+    data_de_pagamento = st.date_input('Data de Pagamento (última parcela)')
     quantidade_comprada = st.number_input("Quantidade Comprada", step=1, format="%d")
     fornecedor = st.text_input('Fornecedor')
 

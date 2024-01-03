@@ -1,8 +1,25 @@
 import streamlit as st
 
+if "logged_in" not in st.session_state:
+    st.session_state.logged_in = False
+
+st.markdown(
+    """
+    <script>
+        // Função para verificar se a tecla pressionada é Enter e, nesse caso, clicar no botão
+        function handleEnter(event) {
+            if (event.keyCode === 13) {
+                document.getElementById("entrarButton").click();
+            }
+        }
+    </script>
+    """,
+    unsafe_allow_html=True,
+)
+
 def acesso():
     codigo_de_acesso = st.text_input('Código de Acesso', type='password')
-    entrar_button = st.button('Entrar', key="entrarButton")
+    entrar_button = st.button('Entrar', key="entrarButton", on_click=handleEnter)
     
     if entrar_button or st.session_state.logged_in:
         if codigo_de_acesso == "20210088628":

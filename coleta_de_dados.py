@@ -3,10 +3,10 @@ import streamlit as st
 def acesso():
     codigo_de_acesso = st.text_input('Código de Acesso', type='password')
     entrar = st.button('Entrar')
-    if entrar and codigo_de_acesso == "20210088628":
+    if codigo_de_acesso == "20210088628" and entrar:
         st.session_state.logged_in = True
     elif entrar:
-        st.warning("O código de acesso inserido não foi aceito, tente outro.")
+        st.warning("O código de acesso inserido não foi aceito, tente novamente.")
 
 def coleta():
     produto_comprado = st.text_input('Produto Comprado')

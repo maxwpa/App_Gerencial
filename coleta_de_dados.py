@@ -39,7 +39,7 @@ def coleta():
         produto_comprado = st.selectbox('Produto Comprado', produtos_ordenados)
         if produto_comprado == 'Novo Produto':
             novo_produto = st.text_input('Novo Produto')
-        elif: produto_comprado == 'Calçados':
+        elif produto_comprado == 'Calçados':
             calcados = [
                     "Tênis esportivo",
                     "Sapatênis",
@@ -111,4 +111,3 @@ if not st.session_state.logged_in:
     acesso()
 else:
     coleta()
-

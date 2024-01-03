@@ -5,7 +5,6 @@ def acesso():
     entrar = st.button('Entrar')
     if entrar and codigo_de_acesso == "20210088628":
         st.session_state.logged_in = True
-        st.success("Login bem-sucedido!")
     elif entrar:
         st.warning("O código de acesso inserido não foi aceito, tente outro.")
 

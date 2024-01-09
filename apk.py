@@ -170,27 +170,18 @@ def dashboard():
     if hasattr(st.session_state, 'logged_in') and st.session_state.logged_in:
         df_compras = criar_dataframe()
         gasto_total = df_compras['custo_final'].sum()
+        #st.subheader("Resumo de Gastos")
+        #st.write(f"**Gasto Total:** R${gasto_total:,.2f}")
         
-        fig = px.scatter()
-        fig.update_layout(
-            template="plotly_dark",
-            margin=dict(r=0, l=0, b=0, t=0),
-            showlegend=False,
-            xaxis=dict(showgrid=False, zeroline=False, showticklabels=False),
-            yaxis=dict(showgrid=False, zeroline=False, showticklabels=False),
-        )
-
-       
-        fig.add_annotation(
-            text=f"Gasto Total\nR${gasto_total:,.2f}",
-            x=0.5,
-            y=0.5,
-            showarrow=False,
-            font=dict(size=20),
-        )
-
-        st.plotly_chart(fig)
-        
+        st.markdown(
+            f"""
+    <div style="border: 2px solid #e2e2e2; border-radius: 5px; padding: 20px; text-align: center; width: 200px; height: 100px; font-family: 'Arial', sans-serif;">
+        <h2 style="color: #008080; font-size: 12px; font-weight: bold; margin-top: 5px;">Gasto Total com Compras</h2>
+        <h1 style="color: #4CAF50; font-size: 18px; font-weight: bold; margin-botton: 1px;">R${gasto_total:,.2f}</h1>
+    </div>
+    """,
+    unsafe_allow_html=True
+)
 
 conn.commit()
 

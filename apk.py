@@ -169,16 +169,31 @@ def tabela():
 def dashboard():
     if hasattr(st.session_state, 'logged_in') and st.session_state.logged_in:
         df_compras = criar_dataframe()
-        gasto_total = df_compras['custo_final'].sum()
         
+        gasto_total = df_compras['custo_final'].sum()
+        qtd_comprada = df_compras['quantidade'].sum()
+        
+        col1, col2 = st.columns(2)
+        
+        with col1:
+            st.markdown(
+                f"""
+                    <div style="border: 5px solid #e2e2e2; border-radius: 0.1px; padding: 1px; text-align: center; width: 200px; height: 100px; font-family: 'Arial', sans-serif; background-color: #483D8B;">
+                        <h2 style="color: #008080; font-size: 12px; font-weight: bold; margin-bottom: -35px;">Gasto Total com Compras</h2>
+                        <h1 style="color: #4CAF50; font-size: 35px; font-weight: normal; margin-top: 5px;">R${gasto_total:,.2f}</h1>
+                    </div>
+        """,
+        unsafe_allow_html=True)
+    
+    with col2:
         st.markdown(
-            f"""
-    <div style="border: 5px solid #e2e2e2; border-radius: 0.1px; padding: 1px; text-align: center; width: 200px; height: 100px; font-family: 'Arial', sans-serif; background-color: #483D8B;">
-        <h2 style="color: #008080; font-size: 12px; font-weight: bold; margin-bottom: -25px;">Gasto Total com Compras</h2>
-        <h1 style="color: #4CAF50; font-size: 25px; font-weight: bold; margin-top: 5px;">R${gasto_total:,.2f}</h1>
-    </div>
-    """,
-    unsafe_allow_html=True)
+                f"""
+                    <div style="border: 5px solid #e2e2e2; border-radius: 0.1px; padding: 1px; text-align: center; width: 200px; height: 100px; font-family: 'Arial', sans-serif; background-color: #483D8B;">
+                        <h2 style="color: #008080; font-size: 12px; font-weight: bold; margin-bottom: -35px;">Quantidade Comprada</h2>
+                        <h1 style="color: #4CAF50; font-size: 35px; font-weight: normal; margin-top: 5px;">{qtd_comprada}</h1>
+                </div>
+        """,
+        unsafe_allow_html=True)      
 
 
 conn.commit()

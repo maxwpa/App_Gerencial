@@ -27,6 +27,7 @@ def indice_paginas():
     paginas = {
         'Tabela de Compras': tabela,
         'Registrar Compra': coleta,
+        'DashBoard Compras': dashboard
     }
     
     escolha_pagina = st.sidebar.radio('Selecione a Página', list(paginas.keys()))
@@ -34,7 +35,7 @@ def indice_paginas():
     paginas[escolha_pagina]()
 
 def coleta():
-    produto = st.text_input('Produto Comprado')
+    produto = st.text_input('Produto Comprado').upper()
     
     letras = ''.join(random.choices(string.ascii_uppercase, k=2))
     numeros = ''.join(random.choices(string.digits, k=5))
@@ -61,14 +62,14 @@ def coleta():
         valor_entrada = preco
         valor_parcelas = 0
     else:
-        parcelas = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]
+        parcelas = list(range(1, 13))
         parcelamento = st.selectbox("Número de Parcelas", parcelas)
         valor_entrada = st.number_input('Valor Pago na Entrada', step=0.01, format="%.2f")
         valor_parcelas = st.number_input('Valor das Parcelas', step=0.01, format="%.2f")
 
     data_pagamento = st.date_input('Data de Pagamento (à vista ou última parcela)')
 
-    fornecedor = st.text_input('Fornecedor')
+    fornecedor = st.text_input('Fornecedor').upper()
     
     data_entrega = st.date_input('Prazo de Entrega')
     
@@ -78,8 +79,7 @@ def coleta():
     
     if registrar_compra:
         if campos_preenchidos:
-            # Calcula custo unitário e final
-            if quantidade != 0:
+            if quantidade > 0:
                 custo_unitario = (preco + custos_adicionais) / quantidade
             else:
                 custo_unitario = 0
@@ -89,7 +89,6 @@ def coleta():
             else:
                 custo_final = valor_parcelas * parcelamento + valor_entrada
 
-            # Insere dados no banco de dados
             inserir_dados(id_produto, produto, tamanho, genero, publico, quantidade, data_compra, preco, custos_adicionais, pagamento, forma_de_pagamento, parcelamento, valor_entrada, valor_parcelas, data_pagamento, fornecedor, data_entrega, custo_unitario, custo_final)
 
             st.success("Compra cadastrada com sucesso!")
@@ -107,22 +106,36 @@ def tabela():
     if hasattr(st.session_state, 'logged_in') and st.session_state.logged_in:
         df_compras = criar_dataframe()
         st.dataframe(df_compras)
-
-# Inicializa o banco de dados
+        
+def dashboard():
+    if hasattr(st.session_state, 'logged_in') and st.session_state.logged_in:
+        df_compras = criar_dataframe()
+        st.sidebar.title("Filtros")
+        filtro_genero = st.sidebar.multiselect("Filtrar por Gênero",
+                                               df_compras["genero"].unique())
+        filtro_pagamento = st.sidebar.multiselect("Filtrar por Forma de Pagamento",
+                                                  df_compras["forma_de_pagamento"].unique())
+        df_filtrado = df_compras[
+        (df_compras["genero"].isin(filtro_genero)) &
+        (df_compras["forma_de_pagamento"].isin(filtro_pagamento))
+    ]
+        st.dataframe(df_filtrado)
+        st.subheader("Gráficos Interativos")
+        st.line_chart(df_filtrado.groupby("data_compra")["quantidade"].sum(),
+                      use_container_width=True)
+        st.subheader("Estatísticas")
+        st.write("Total de Compras:", df_filtrado.shape[0])
+        st.write("Quantidade Total Comprada:", df_filtrado["quantidade"].sum())
+        st.write("Custo Total:", df_filtrado["custo_final"].sum())
+        
 conn = sqlite3.connect('casa_de_dados.db')
 cursor = conn.cursor()
 
-# Verifica se a tabela compras existe, caso contrário, cria
-registrar_compra()
-
-# Commit para garantir que as alterações sejam salvas
 conn.commit()
 
-# Verifica se o usuário está logado
 if "logged_in" not in st.session_state:
     st.session_state.logged_in = False
 
-# Se não estiver logado, exibe a página de login, caso contrário, exibe o índice de páginas
 if not st.session_state.logged_in:
     acesso()
 else:

@@ -170,11 +170,27 @@ def dashboard():
     if hasattr(st.session_state, 'logged_in') and st.session_state.logged_in:
         df_compras = criar_dataframe()
         gasto_total = df_compras['custo_final'].sum()
-        fig = px.indicators.card(value=gasto_total, title='Gasto Total com Compras', 
-                                 labels={'value': 'R$'})
+        
+        fig = px.scatter()
+        fig.update_layout(
+            template="plotly_dark",
+            margin=dict(r=0, l=0, b=0, t=0),
+            showlegend=False,
+            xaxis=dict(showgrid=False, zeroline=False, showticklabels=False),
+            yaxis=dict(showgrid=False, zeroline=False, showticklabels=False),
+        )
+
+       
+        fig.add_annotation(
+            text=f"Gasto Total\nR${gasto_total:,.2f}",
+            x=0.5,
+            y=0.5,
+            showarrow=False,
+            font=dict(size=20),
+        )
+
         st.plotly_chart(fig)
         
-   
 
 conn.commit()
 

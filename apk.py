@@ -170,18 +170,16 @@ def dashboard():
     if hasattr(st.session_state, 'logged_in') and st.session_state.logged_in:
         df_compras = criar_dataframe()
         gasto_total = df_compras['custo_final'].sum()
-        #st.subheader("Resumo de Gastos")
-        #st.write(f"**Gasto Total:** R${gasto_total:,.2f}")
         
         st.markdown(
             f"""
-    <div style="border: 2px solid #e2e2e2; border-radius: 5px; padding: 20px; text-align: center; width: 200px; height: 100px; font-family: 'Arial', sans-serif;">
-        <h2 style="color: #008080; font-size: 12px; font-weight: bold; margin-top: 5px;">Gasto Total com Compras</h2>
-        <h1 style="color: #4CAF50; font-size: 18px; font-weight: bold; margin-botton: 1px;">R${gasto_total:,.2f}</h1>
+    <div style="border: 5px solid #e2e2e2; border-radius: 0.1px; padding: 1px; text-align: center; width: 200px; height: 100px; font-family: 'Arial', sans-serif; background-color: #483D8B;">
+        <h2 style="color: #008080; font-size: 12px; font-weight: bold; margin-bottom: -25px;">Gasto Total com Compras</h2>
+        <h1 style="color: #4CAF50; font-size: 25px; font-weight: bold; margin-top: 5px;">R${gasto_total:,.2f}</h1>
     </div>
     """,
-    unsafe_allow_html=True
-)
+    unsafe_allow_html=True)
+
 
 conn.commit()
 

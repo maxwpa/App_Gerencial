@@ -154,8 +154,13 @@ def tabela():
         filtro_publico = st.sidebar.multiselect('Filtrar por Público', df_compras['publico'].unique())
         filtro_fornecedor = st.sidebar.multiselect('Filtrar por Fornecedor', df_compras['fornecedor'].unique())
         
-        if filtro_produto or filtro_tamanho:
-            df_compras_filtrado = df_compras[df_compras['produto'].isin(filtro_produto)]
+        if filtro_produto or filtro_tamanho or filtro_genero or filtro_publico or filtro_fornecedor:
+            df_compras_filtrado = df_compras[
+                (df_compras['produto'].isin(filtro_produto) if filtro_produto else True) &
+                (df_compras['tamanho'].isin(filtro_tamanho) if filtro_tamanho else True) &
+                (df_compras['genero'].isin(filtro_genero) if filtro_genero else True) &
+                (df_compras['publico'].isin(filtro_publico) if filtro_publico else True) &
+                (df_compras['fornecedor'].isin(filtro_fornecedor) if filtro_fornecedor else True)]
             st.dataframe(df_compras_filtrado)
         else:
             st.dataframe(df_compras)

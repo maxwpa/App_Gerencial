@@ -149,8 +149,12 @@ def tabela():
     if hasattr(st.session_state, 'logged_in') and st.session_state.logged_in:
         df_compras = criar_dataframe()
         filtro_produto = st.sidebar.multiselect('Filtrar por Produto', df_compras['produto'].unique())
+        filtro_tamanho = st.sidebar.multiselect('Filtrar por Tamanho', df_compras['tamanho'].unique())
+        filtro_genero = st.sidebar.multiselect('Filtrar por Gênero', df_compras['genero'].unique())
+        filtro_publico = st.sidebar.multiselect('Filtrar por Público', df_compras['publico'].unique())
+        filtro_fornecedor = st.sidebar.multiselect('Filtrar por Fornecedor', df_compras['fornecedor'].unique())
         
-        if filtro_produto:
+        if filtro_produto or filtro_tamanho:
             df_compras_filtrado = df_compras[df_compras['produto'].isin(filtro_produto)]
             st.dataframe(df_compras_filtrado)
         else:

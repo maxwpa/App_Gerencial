@@ -171,7 +171,7 @@ def dashboard():
         df_compras = criar_dataframe()
         gasto_total = df_compras['custo_final'].sum()
         fig = px.indicators.card(value=gasto_total, title='Gasto Total com Compras', 
-                                 labels={'value': 'R$'}
+                                 labels={'value': 'R$'})
         st.plotly_chart(fig)
         
    

@@ -1,5 +1,6 @@
 import streamlit as st
 import pandas as pd
+import plotly.express as px
 import sqlite3
 import random
 import string
@@ -169,7 +170,9 @@ def dashboard():
     if hasattr(st.session_state, 'logged_in') and st.session_state.logged_in:
         df_compras = criar_dataframe()
         gasto_total = df_compras['custo_final'].sum()
-        st.info(f'Gasto Total com Compras: R${gasto_total:.2f}')
+        fig = px.indicators.card(value=gasto_total, title='Gasto Total com Compras', 
+                                 labels={'value': 'R$'}
+        st.plotly_chart(fig)
         
    
 

@@ -149,6 +149,7 @@ def tabela():
     if hasattr(st.session_state, 'logged_in') and st.session_state.logged_in:
         df_compras = criar_dataframe()
         st.dataframe(df_compras)
+        st.sidebar.multiselect('Filtrar por Produto', df_compras['produto'].unique())
         
 def dashboard():
     if hasattr(st.session_state, 'logged_in') and st.session_state.logged_in:

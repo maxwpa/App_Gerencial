@@ -25,7 +25,7 @@ def acesso():
     entrar = st.button('Entrar')
     if codigo_de_acesso == "2" and entrar:
         st.session_state.logged_in = True
-        coleta()
+        st.experimental_rerun()
     elif entrar:
         st.warning("O código de acesso inserido não foi aceito, tente novamente.")
 
@@ -43,7 +43,7 @@ def coleta():
     produtos_existentes = cursor.fetchall()
     
     def custom_sort_key(a1):
-        return a1 if a1 != 'Novo Produto' else 'zzz'
+            return a1 if a1 != 'Novo Produto' else 'zzz'
     
     opcao_produtos.extend(sorted([item[0] for item in produtos_existentes], key=custom_sort_key))
     
@@ -62,7 +62,7 @@ def coleta():
     opcao_modelo = ['Novo Modelo'] 
     
     def custom_sort_key(a2):
-        return a2 if a2 != 'Novo Modelo' else 'zzz'
+            return a2 if a2 != 'Novo Modelo' else 'zzz'
     modelo_ordenados = sorted(opcao_modelo, key=custom_sort_key)
     modelo = st.selectbox('Modelo Comprado', modelo_ordenados)
 
@@ -117,4 +117,8 @@ def dashboard():
 registrar_produto()
 registrar_compra()
 acesso()
+gerar_id_unico()
+coleta()
+inserir_dados()
+criar_dataframe()
 dashboard()

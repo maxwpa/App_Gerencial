@@ -150,7 +150,7 @@ def tabela():
         df_compras = criar_dataframe()
         
         filtro_produto = st.sidebar.multiselect('Filtrar por Produto', df_compras['produto'].unique())
-         filtro_tamanho = st.sidebar.multiselect('Filtrar por Tamanho', df_compras['tamanho'].unique())
+        filtro_tamanho = st.sidebar.multiselect('Filtrar por Tamanho', df_compras['tamanho'].unique())
         filtro_genero = st.sidebar.multiselect('Filtrar por Gênero', df_compras['genero'].unique())
         filtro_publico = st.sidebar.multiselect('Filtrar por Público', df_compras['publico'].unique())
         filtro_fornecedor = st.sidebar.multiselect('Filtrar por Fornecedor', df_compras['fornecedor'].unique())

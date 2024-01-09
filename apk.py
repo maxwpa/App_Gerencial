@@ -168,25 +168,8 @@ def tabela():
 def dashboard():
     if hasattr(st.session_state, 'logged_in') and st.session_state.logged_in:
         df_compras = criar_dataframe()
-        st.sidebar.title("Filtros")
-        filtro_genero = st.sidebar.multiselect("Filtrar por Gênero",
-                                               df_compras["genero"].unique())
-        filtro_pagamento = st.sidebar.multiselect("Filtrar por Forma de Pagamento",
-                                                  df_compras["forma_de_pagamento"].unique())
-        df_filtrado = df_compras[
-        (df_compras["genero"].isin(filtro_genero)) &
-        (df_compras["forma_de_pagamento"].isin(filtro_pagamento))
-    ]
-        
-        st.subheader("Gráficos Interativos")
-        st.line_chart(df_filtrado.groupby("data_compra")["quantidade"].sum(),
-                      use_container_width=True)
-        st.subheader("Estatísticas")
-        st.write("Total de Compras:", df_filtrado.shape[0])
-        st.write("Quantidade Total Comprada:", df_filtrado["quantidade"].sum())
-        st.write("Custo Total:", df_filtrado["custo_final"].sum())
-        
-        st.dataframe(df_filtrado)
+        gasto_total = df_compras['custo_final'].sum()
+        st.info(f'Gasto Total com Compras: R${gasto_total:.2f}')
 
 conn.commit()
 

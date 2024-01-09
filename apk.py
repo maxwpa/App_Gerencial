@@ -148,8 +148,12 @@ def criar_dataframe():
 def tabela():
     if hasattr(st.session_state, 'logged_in') and st.session_state.logged_in:
         df_compras = criar_dataframe()
-        st.dataframe(df_compras)
-        st.sidebar.multiselect('Filtrar por Produto', df_compras['produto'].unique())
+        filtro_produto = st.sidebar.multiselect('Filtrar por Produto', df_compras['produto'].unique())
+        if filtro_produto:
+            df_compras_filtrado = df_compras[df_compras['produto'].isin(filtro_produto)]
+            st.dataframe(df_compras_filtrado)
+        else:
+            st.dataframe(df_compras)
         
 def dashboard():
     if hasattr(st.session_state, 'logged_in') and st.session_state.logged_in:

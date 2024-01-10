@@ -1,6 +1,7 @@
 import streamlit as st
 import pandas as pd
-import plotly.express as px
+import matplotlib.pyplot as plt
+from io import BytesIO
 import sqlite3
 import random
 import string
@@ -165,7 +166,20 @@ def tabela():
             st.dataframe(df_compras_filtrado)
         else:
             st.dataframe(df_compras)
-        
+            
+def plot_pie_chart(df, image_width=335, image_height=300):
+    df_agrupado = df.groupby('produto')['custo_final'].sum().reset_index()
+
+    fig, ax = plt.subplots(figsize=(image_width / 60, image_height / 60))
+    ax.pie(df_agrupado['custo_final'], labels=df_agrupado['produto'], autopct='%1.1f%%', startangle=90)
+    ax.axis('equal')
+
+    image_stream = BytesIO()
+    plt.savefig(image_stream, format='png')
+    plt.close(fig)
+
+    return image_stream
+            
 def dashboard():
     if hasattr(st.session_state, 'logged_in') and st.session_state.logged_in:
         df_compras = criar_dataframe()
@@ -188,7 +202,7 @@ def dashboard():
             mais_comprado = df_compras_filtrado['produto'].value_counts().idxmax()
             pri_fornecedor = df_compras_filtrado['fornecedor'].value_counts().idxmax()
 
-            fig = px.pie(df_compras_filtrado, values='custo_final', names='produto', title='Gastos por Produto')
+            pie_chart_stream = plot_pie_chart(df_compras_filtrado)
 
         else:
             gasto_total = df_compras['custo_final'].sum()
@@ -196,7 +210,7 @@ def dashboard():
             mais_comprado = df_compras['produto'].value_counts().idxmax()
             pri_fornecedor = df_compras['fornecedor'].value_counts().idxmax()
             
-            fig = px.pie(df_compras, values='custo_final', names='produto', title='Custo Final por Produto')
+            pie_chart_stream = plot_pie_chart(df_compras)
             
         col1, col2, col3, col4 = st.columns(4)
 
@@ -239,8 +253,10 @@ def dashboard():
                     </div>
                 """,
                 unsafe_allow_html=True)
-            
-        st.plotly_chart(fig)
+        
+        colu1, colu2 = st.columns(2)
+        with colu1:
+            st.image(pie_chart_stream, use_column_width=True)
 
 conn.commit()
 

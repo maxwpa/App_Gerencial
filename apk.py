@@ -169,32 +169,115 @@ def tabela():
 def dashboard():
     if hasattr(st.session_state, 'logged_in') and st.session_state.logged_in:
         df_compras = criar_dataframe()
-        
-        gasto_total = df_compras['custo_final'].sum()
-        qtd_comprada = df_compras['quantidade'].sum()
-        
-        col1, col2 = st.columns(2)
-        
+
+        filtro_produto = st.sidebar.multiselect('Filtrar por Produto', df_compras['produto'].unique())
+        filtro_tamanho = st.sidebar.multiselect('Filtrar por Tamanho', df_compras['tamanho'].unique())
+        filtro_genero = st.sidebar.multiselect('Filtrar por Gênero', df_compras['genero'].unique())
+        filtro_publico = st.sidebar.multiselect('Filtrar por Público', df_compras['publico'].unique())
+        filtro_fornecedor = st.sidebar.multiselect('Filtrar por Fornecedor', df_compras['fornecedor'].unique())
+
+        if filtro_produto or filtro_tamanho or filtro_genero or filtro_publico or filtro_fornecedor:
+            df_compras_filtrado = df_compras[
+                (df_compras['produto'].isin(filtro_produto) if filtro_produto else True) &
+                (df_compras['tamanho'].isin(filtro_tamanho) if filtro_tamanho else True) &
+                (df_compras['genero'].isin(filtro_genero) if filtro_genero else True) &
+                (df_compras['publico'].isin(filtro_publico) if filtro_publico else True) &
+                (df_compras['fornecedor'].isin(filtro_fornecedor) if filtro_fornecedor else True)]
+            gasto_total = df_compras_filtrado['custo_final'].sum()
+            qtd_comprada = df_compras_filtrado['quantidade'].sum()
+            mais_comprado = df_compras_filtrado['produto'].value_counts().idxmax()
+            pri_fornecedor = df_compras_filtrado['fornecedor'].value_counts().idxmax()
+
+            fig = px.pie(df_compras_filtrado, values='custo_final', names='produto', title='Gastos por Produto')
+
+        else:
+            gasto_total = df_compras['custo_final'].sum()
+            qtd_comprada = df_compras['quantidade'].sum()
+            mais_comprado = df_compras['produto'].value_counts().idxmax()
+            pri_fornecedor = df_compras['fornecedor'].value_counts().idxmax()
+            
+            labels = df_compras['produto'].tolist()
+            data = df_compras['custo_final'].tolist()
+            
+        col1, col2, col3, col4 = st.columns(4)
+
         with col1:
             st.markdown(
                 f"""
-                    <div style="border: 5px solid #e2e2e2; border-radius: 0.1px; padding: 1px; text-align: center; width: 200px; height: 100px; font-family: 'Arial', sans-serif; background-color: #483D8B;">
-                        <h2 style="color: #008080; font-size: 12px; font-weight: bold; margin-bottom: -35px;">Gasto Total com Compras</h2>
-                        <h1 style="color: #4CAF50; font-size: 35px; font-weight: normal; margin-top: 5px;">R${gasto_total:,.2f}</h1>
+                    <div style="border: 3px solid #e2e2e2; border-radius: 0.1px; padding: 1px; text-align: center; width: 150px; height: 50px; font-family: 'Arial', sans-serif; background-color: #7FFFD4;">
+                        <h2 style="color: #008080; font-size: 12px; font-weight: bold; margin-bottom: -25px; margin-top: -18px;">Gasto Total com Compras</h2>
+                        <h1 style="color: #4CAF50; font-size: 25px; font-weight: normal; margin-top: -38px;">R${gasto_total}</h1>
                     </div>
-        """,
-        unsafe_allow_html=True)
-    
-    with col2:
-        st.markdown(
-                f"""
-                    <div style="border: 5px solid #e2e2e2; border-radius: 0.1px; padding: 1px; text-align: center; width: 200px; height: 100px; font-family: 'Arial', sans-serif; background-color: #483D8B;">
-                        <h2 style="color: #008080; font-size: 12px; font-weight: bold; margin-bottom: -35px;">Quantidade Comprada</h2>
-                        <h1 style="color: #4CAF50; font-size: 35px; font-weight: normal; margin-top: 5px;">{qtd_comprada}</h1>
-                </div>
-        """,
-        unsafe_allow_html=True)      
+                """,
+                unsafe_allow_html=True)
 
+        with col2:
+            st.markdown(
+                f"""
+                    <div style="border: 3px solid #e2e2e2; border-radius: 0.1px; padding: 1px; text-align: center; width: 150px; height: 50px; font-family: 'Arial', sans-serif; background-color: #7FFFD4;">
+                        <h2 style="color: #008080; font-size: 12px; font-weight: bold; margin-bottom: -25px; margin-top: -18px;">Quantidade Comprada</h2>
+                        <h1 style="color: #4CAF50; font-size: 30px; font-weight: normal; margin-top: -40px;">{qtd_comprada}</h1>
+                    </div>
+                """,
+                unsafe_allow_html=True)
+
+        with col3:
+            st.markdown(
+                f"""
+                    <div style="border: 3px solid #e2e2e2; border-radius: 0.1px; padding: 1px; text-align: center; width: 150px; height: 50px; font-family: 'Arial', sans-serif; background-color: #7FFFD4;">
+                        <h2 style="color: #008080; font-size: 12px; font-weight: bold; margin-bottom: -25px; margin-top: -18px;">Mais Comprado</h2>
+                        <h1 style="color: #4CAF50; font-size: 20px; font-weight: normal; margin-top: -35px;">{mais_comprado}</h1>
+                    </div>
+                """,
+                unsafe_allow_html=True)
+
+        with col4:
+            st.markdown(
+                f"""
+                    <div style="border: 3px solid #e2e2e2; border-radius: 0.1px; padding: 1px; text-align: center; width: 150px; height: 50px; font-family: 'Arial', sans-serif; background-color: #7FFFD4;">
+                        <h2 style="color: #008080; font-size: 12px; font-weight: bold; margin-bottom: -25px; margin-top: -18px;">Principal Fornecedor</h2>
+                        <h1 style="color: #4CAF50; font-size: 20px; font-weight: normal; margin-top: -35px;">{pri_fornecedor}</h1>
+                    </div>
+                """,
+                unsafe_allow_html=True)
+
+        chart_html = f"""
+                        <canvas id="pieChart" width="400" height="400"></canvas>
+                        <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+                        <script>
+                        var ctx = document.getElementById('pieChart').getContext('2d');
+                        var myPieChart = new Chart(ctx, {{
+                            type: 'pie',
+                            data: {{
+                                labels: {labels},
+                                datasets: [{{
+                                    data: {data},
+                                    backgroundColor: [
+                                        'rgba(255, 99, 132, 0.7)',
+                                        'rgba(54, 162, 235, 0.7)',
+                                        'rgba(255, 206, 86, 0.7)',
+                                    ],
+                                    borderColor: [
+                                        'rgba(255, 99, 132, 1)',
+                                        'rgba(54, 162, 235, 1)',
+                                        'rgba(255, 206, 86, 1)',
+                                    ],
+                                    borderWidth: 1
+                                }}]
+                            }},
+                            options: {{
+                                title: {{
+                                    display: true,
+                                    text: 'Gastos por Produto'
+                                }}
+                            }}
+                        }});
+                        </script>
+                        """
+
+       
+        st.markdown(chart_html, unsafe_allow_html=True)
+        st.write(f"Gasto Total com Compras: R${gasto_total}")
 
 conn.commit()
 

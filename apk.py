@@ -2,6 +2,7 @@ import streamlit as st
 import pandas as pd
 import matplotlib.pyplot as plt
 from io import BytesIO
+import base64
 import sqlite3
 import random
 import string
@@ -167,15 +168,31 @@ def tabela():
         else:
             st.dataframe(df_compras)
             
-def plot_pie_chart(df, image_width=335, image_height=300):
+def plot_pie_chart(df, image_width=300, image_height=260):
     df_agrupado = df.groupby('produto')['custo_final'].sum().reset_index()
 
-    fig, ax = plt.subplots(figsize=(image_width / 60, image_height / 60))
-    ax.pie(df_agrupado['custo_final'], labels=df_agrupado['produto'], autopct='%1.1f%%', startangle=90)
+    fig, ax = plt.subplots(figsize=(image_width / 70, image_height / 70))
+    
+    
+    font_size = 7.5
+    
+    wedges, texts, autotexts = ax.pie(
+        df_agrupado['custo_final'],
+        labels=df_agrupado['produto'],
+        autopct='%1.1f%%',
+        startangle=90,
+        textprops=dict(color="w", size=font_size, weight='bold'),
+        wedgeprops=dict(width=0.4)
+    )
+
     ax.axis('equal')
 
+    
+    for text in texts + autotexts:
+        text.set_fontsize(font_size)
+
     image_stream = BytesIO()
-    plt.savefig(image_stream, format='png')
+    plt.savefig(image_stream, format='png', transparent=True)
     plt.close(fig)
 
     return image_stream
@@ -255,8 +272,16 @@ def dashboard():
                 unsafe_allow_html=True)
         
         colu1, colu2 = st.columns(2)
+       
         with colu1:
-            st.image(pie_chart_stream, use_column_width=True)
+            image_base64 = base64.b64encode(pie_chart_stream.getvalue()).decode()
+            html_code = f"""
+                <div style="border: 3px solid #e2e2e2; border-radius: 0.1px; padding: 1px; text-align: center; width: 250px; height: 195px; font-family: 'Arial', sans-serif; background-color: #008080;">
+                    <h2 style="color: #7FFFD4; font-size: 12px; font-weight: bold; margin-bottom: -25px; margin-top: -18px;">Gasto Por Produto</h2>
+                    <img src="data:image/png;base64, {image_base64}" alt="Gastos Por Produtos" style="width: 220px; height: 190px; border-radius: 10px;">
+                </div>
+            """
+        st.markdown(html_code, unsafe_allow_html=True)
 
 conn.commit()
 

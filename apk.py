@@ -372,7 +372,7 @@ def dashboard():
                 """,
                 unsafe_allow_html=True)
         
-        write("<div style='height: 5px;'></div>", unsafe_allow_html=True)
+        st.write("<div style='height: 5px;'></div>", unsafe_allow_html=True)
         
         colu1, colu2 = st.columns(2)
        

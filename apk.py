@@ -80,6 +80,8 @@ def indice_paginas():
 
 def coleta():
     if hasattr(st.session_state, 'logged_in') and st.session_state.logged_in:
+        st.title('Cadastrar Compra')
+        
         produto = st.text_input('Produto Comprado').upper()
 
         letras = ''.join(random.choices(string.ascii_uppercase, k=2))

@@ -6,6 +6,8 @@ import base64
 import sqlite3
 import random
 import string
+from datetime import datetime
+from dateutil.relativedelta import relativedelta
 
 conn = sqlite3.connect('dados_compras.db')
 cursor = conn.cursor()

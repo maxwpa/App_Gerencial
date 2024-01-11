@@ -69,9 +69,9 @@ def indice_paginas():
         st.sidebar.title('Índice de Páginas')
 
         paginas = {
-            'Tabela de Compras': tabela,
-            'Registrar Compra': coleta,
-            'DashBoard Compras': dashboard
+            'Cadastrar Compras': coleta,
+            'Lançamento de Compras': tabela,
+            'Controle de Compras': dashboard
         }
 
         escolha_pagina = st.sidebar.radio('Selecione a Página', list(paginas.keys()))

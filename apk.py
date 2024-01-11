@@ -66,12 +66,12 @@ def acesso():
 
 def indice_paginas():
     if hasattr(st.session_state, 'logged_in') and st.session_state.logged_in:    
-        st.sidebar.title('Índice de Páginas')
+        st.sidebar.title('Compras')
 
         paginas = {
-            'Cadastrar Compras': coleta,
-            'Lançamento de Compras': tabela,
-            'Controle de Compras': dashboard
+            'Cadastro': coleta,
+            'Histórico': tabela,
+            'Controle': dashboard
         }
 
         escolha_pagina = st.sidebar.radio('Selecione a Página', list(paginas.keys()))

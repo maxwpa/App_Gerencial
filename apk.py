@@ -20,7 +20,7 @@ def registrar_compra():
             genero TEXT NOT NULL,
             publico TEXT NOT NULL,
             quantidade INTEGER NOT NULL,
-            data_compra DATE NOT NULL,
+            data_compra DATETIME NOT NULL,
             preco REAL NOT NULL,
             custos_adicionais REAL NOT NULL,
             pagamento TEXT NOT NULL,
@@ -28,9 +28,9 @@ def registrar_compra():
             parcelas INTEGER NOT NULL,
             valor_entrada REAL NOT NULL,
             valor_parcela REAL NOT NULL,
-            data_pagamento DATE NOT NULL,
+            data_pagamento DATETIME NOT NULL,
             fornecedor TEXT NOT NULL,
-            data_entrega DATE NOT NULL,
+            data_entrega DATETIME NOT NULL,
             custo_unitario REAL NOT NULL,
             custo_final REAL NOT NULL
         )
@@ -105,7 +105,16 @@ def coleta():
             valor_entrada = st.number_input('Valor Pago na Entrada', step=0.01, format="%.2f")
             valor_parcela = st.number_input('Valor das Parcelas', step=0.01, format="%.2f")
 
-        data_pagamento = st.date_input('Data de Pagamento (à vista ou última parcela)')
+        data_pagamento = st.date_input('Data do Pagamento À Vista ou Primeira Parcela:')
+        
+        hoje = datetime.now().date()
+        relativa_delta = relativedelta(hoje, data_pagamento)
+        numero_parcelas_pagas = relativa_delta.years * 12 + relativa_delta.months
+        
+        data_proxima_parcela = data_pagamento + relativedelta(months=numero_parcelas_pagas + 1)
+        
+        amortizado = numero_parcelas_paga * valor_parcela + valor_entrada
+        divida = max(parcelamento - numero_parcelas_pagas, 0) * valor_parcela
 
         fornecedor = st.text_input('Fornecedor').upper()
 

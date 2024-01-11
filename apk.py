@@ -318,14 +318,14 @@ def dashboard():
                 """,
                 unsafe_allow_html=True)
             
-        st.write("<div style='height: 15px;'></div>", unsafe_allow_html=True)
+        st.write("<div style='height: 5px;'></div>", unsafe_allow_html=True)
             
         col_b1, col_b2, col_b3, col_b4, col_b5 = st.columns(5)
 
         with col_b1:
             st.markdown(
                 f"""
-                    <div style="border: 3px solid #e2e2e2; border-radius: 5px; padding: 1px; text-align: center; width: 150px; height: 50px; font-family: 'Arial', sans-serif; background-color: #7FFFD4; box-shadow: inset 0 0 40px rgba(0, 0, 0, 1)">
+                    <div style="border: 3px solid #e2e2e2; border-radius: 5px; padding: 1px; text-align: center; width: 140px; height: 50px; font-family: 'Arial', sans-serif; background-color: #7FFFD4; box-shadow: inset 0 0 40px rgba(0, 0, 0, 1)">
                         <h2 style="color: #008080; font-size: 12px; font-weight: bold; margin-bottom: -25px; margin-top: -18px;">Total Pago</h2>
                         <h1 style="color: #4CAF50; font-size: 25px; font-weight: normal; margin-top: -38px;">R${contas_pagas:.2f}</h1>
                     </div>
@@ -362,6 +362,18 @@ def dashboard():
                 """,
                 unsafe_allow_html=True)
         
+        with col_b5:
+            st.markdown(
+                f"""
+                    <div style="border: 3px solid #e2e2e2; border-radius: 5px; padding: 1px; text-align: center; width: 140px; height: 50px; font-family: 'Arial', sans-serif; background-color: #7FFFD4; box-shadow: inset 0 0 40px rgba(0, 0, 0, 1)">
+                        <h2 style="color: #008080; font-size: 12px; font-weight: bold; margin-bottom: -25px; margin-top: -18px;">Total Pago</h2>
+                        <h1 style="color: #4CAF50; font-size: 25px; font-weight: normal; margin-top: -38px;">R${contas_pagas:.2f}</h1>
+                    </div>
+                """,
+                unsafe_allow_html=True)
+        
+        t.write("<div style='height: 5px;'></div>", unsafe_allow_html=True)
+        
         colu1, colu2 = st.columns(2)
        
         with colu1:
@@ -374,15 +386,7 @@ def dashboard():
             """
         st.markdown(html_code, unsafe_allow_html=True)
         
-        with col_b5:
-            st.markdown(
-                f"""
-                    <div style="border: 3px solid #e2e2e2; border-radius: 5px; padding: 1px; text-align: center; width: 140px; height: 50px; font-family: 'Arial', sans-serif; background-color: #7FFFD4; box-shadow: inset 0 0 40px rgba(0, 0, 0, 1)">
-                        <h2 style="color: #008080; font-size: 12px; font-weight: bold; margin-bottom: -25px; margin-top: -18px;">Total Pago</h2>
-                        <h1 style="color: #4CAF50; font-size: 25px; font-weight: normal; margin-top: -38px;">R${contas_pagas:.2f}</h1>
-                    </div>
-                """,
-                unsafe_allow_html=True)
+        
 
 conn.commit()
 

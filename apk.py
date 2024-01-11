@@ -196,10 +196,10 @@ def tabela():
 def plot_pie_chart(df, image_width=300, image_height=260):
     df_agrupado = df.groupby('produto')['custo_final'].sum().reset_index()
 
-    fig, ax = plt.subplots(figsize=(image_width / 70, image_height / 70))
+    fig, ax = plt.subplots(figsize=(image_width / 100, image_height / 100))
     
     
-    font_size = 7.5
+    font_size = 12
     
     wedges, texts, autotexts = ax.pie(
         df_agrupado['custo_final'],
@@ -207,7 +207,8 @@ def plot_pie_chart(df, image_width=300, image_height=260):
         autopct='%1.1f%%',
         startangle=90,
         textprops=dict(color="w", size=font_size, weight='bold'),
-        wedgeprops=dict(width=0.4)
+        wedgeprops=dict(width=0.4),
+        radius=0.9
     )
 
     ax.axis('equal')
@@ -345,11 +346,15 @@ def dashboard():
                 unsafe_allow_html=True)
 
         with col_b2:
+            if len(mais_comprado) <= 12:
+                fonte = 20
+            else:
+                fonte = 19
             st.markdown(
                 f"""
                     <div style="border: 3px solid #e2e2e2; border-radius: 5px; padding: 1px; text-align: center; width: 140px; height: 50px; font-family: 'Arial', sans-serif; background-color: #7FFFD4; box-shadow: inset 0 0 40px rgba(0, 0, 0, 1)">
                         <h2 style="color: #008080; font-size: 12px; font-weight: bold; margin-bottom: -25px; margin-top: -18px;">Prod. Mais Comprado</h2>
-                        <h1 style="color: #4CAF50; font-size: 20px; font-weight: normal; margin-top: -35px;">{mais_comprado}</h1>
+                        <h1 style="color: #4CAF50; font-size: {fonte}px; font-weight: normal; margin-top: -35px;">{mais_comprado}</h1>
                     </div>
                 """,
                 unsafe_allow_html=True)
@@ -391,7 +396,7 @@ def dashboard():
         with colu1:
             image_base64 = base64.b64encode(pie_chart_stream.getvalue()).decode()
             html_code = f"""
-                <div style="border: 3px solid #e2e2e2; border-radius: 5px; padding: 1px; text-align: center; width: 250px; height: 195px; font-family: 'Arial', sans-serif; background-color: #008080; box-shadow: inset 0 0 40px rgba(0, 0, 0, 1)">
+                <div style="border: 3px solid #e2e2e2; border-radius: 5px; padding: 1px; text-align: center; width: 285px; height: 195px; font-family: 'Arial', sans-serif; background-color: #008080; box-shadow: inset 0 0 40px rgba(0, 0, 0, 1)">
                     <h2 style="color: #7FFFD4; font-size: 12px; font-weight: bold; margin-bottom: -25px; margin-top: -18px;">Gasto Por Produto</h2>
                     <img src="data:image/png;base64, {image_base64}" alt="Gastos Por Produtos" style="width: 220px; height: 190px; border-radius: 10px;">
                 </div>

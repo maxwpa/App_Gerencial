@@ -121,8 +121,6 @@ def coleta():
         parcelas_pagas = relativa_delta.years * 12 + relativa_delta.months
         parcelas_restantes = parcelamento - parcelas_pagas
         
-        #proxima_parcela = data_pagamento + relativedelta(months=parcelas_pagas + 1)
-        
         amortizado = parcelas_pagas * valor_parcela + valor_entrada
         divida = max(parcelamento - parcelas_pagas, 0) * valor_parcela
 
@@ -143,7 +141,7 @@ def coleta():
             custo_final = preco + custos_adicionais
             parcelas_pagas = 0
             parcelas_restantes = 0
-            proxima_parcela = data_pagamento
+            proxima_parcela = 'PAGO'
             amortizado = preco
             divida = 0
         else:
@@ -250,7 +248,8 @@ def dashboard():
             contas_pagas = df_compras_filtrado['amortizado'].sum() + df_compras_filtrado['custos_adicionais'].sum()
             dividas = df_compras_filtrado['divida'].sum()
             pagamentos_restantes = df_compras_filtrado['parcelas_restantes'].sum()
-            proximo_pagamento = df_compras_filtrado['proxima_parcela'].min()
+            proximo_pagamento_str = df_compras_filtrado['proxima_parcela'].min()
+            custo_peca = df_compras_filtrado['custo_unitario'].mean()          
 
             pie_chart_stream = plot_pie_chart(df_compras_filtrado)
 
@@ -262,9 +261,22 @@ def dashboard():
             contas_pagas = df_compras['amortizado'].sum() + df_compras['custos_adicionais'].sum()
             dividas = df_compras['divida'].sum()
             pagamentos_restantes = df_compras['parcelas_restantes'].sum()
-            proximo_pagamento = df_compras['proxima_parcela'].min()
+            proximo_pagamento_str = df_compras['proxima_parcela'].min()
+            custo_peca = df_compras['custo_unitario'].mean()
+            
             
             pie_chart_stream = plot_pie_chart(df_compras)
+        if proximo_pagamento_str != 'PAGO':
+            proximo_pagamento = datetime.strptime(proximo_pagamento_str, '%Y-%m-%d')
+            data_atual = datetime.now()
+            dias_falta = (proximo_pagamento - data_atual).days
+            if dias_falta == 1:
+                vencimento = 'AMANHÃ'
+            else:
+                vencimento = f'EM {dias_falta} DIAS'
+        else:
+            vencimento = 'PAGO'
+        preco_recomendado = custo_peca * 0.3 + custo_peca
             
         col_a1, col_a2, col_a3, col_a4, col_a5 = st.columns(5)
 
@@ -313,7 +325,7 @@ def dashboard():
                 f"""
                     <div style="border: 3px solid #e2e2e2; border-radius: 5px; padding: 1px; text-align: center; width: 140px; height: 50px; font-family: 'Arial', sans-serif; background-color: #7FFFD4; box-shadow: inset 0 0 40px rgba(0, 0, 0, 1)">
                         <h2 style="color: #008080; font-size: 12px; font-weight: bold; margin-bottom: -25px; margin-top: -18px;">Próximo Vencimento</h2>
-                        <h1 style="color: #4CAF50; font-size: 20px; font-weight: normal; margin-top: -35px;">{proximo_pagamento}</h1>
+                        <h1 style="color: #4CAF50; font-size: 20px; font-weight: normal; margin-top: -35px;">{vencimento}</h1>
                     </div>
                 """,
                 unsafe_allow_html=True)
@@ -356,8 +368,8 @@ def dashboard():
             st.markdown(
                 f"""
                     <div style="border: 3px solid #e2e2e2; border-radius: 5px; padding: 1px; text-align: center; width: 140px; height: 50px; font-family: 'Arial', sans-serif; background-color: #7FFFD4; box-shadow: inset 0 0 40px rgba(0, 0, 0, 1)">
-                        <h2 style="color: #008080; font-size: 12px; font-weight: bold; margin-bottom: -25px; margin-top: -18px;">Total Pago</h2>
-                        <h1 style="color: #4CAF50; font-size: 25px; font-weight: normal; margin-top: -38px;">R${contas_pagas:.2f}</h1>
+                        <h2 style="color: #008080; font-size: 12px; font-weight: bold; margin-bottom: -25px; margin-top: -18px;">Custo Unitário</h2>
+                        <h1 style="color: #4CAF50; font-size: 25px; font-weight: normal; margin-top: -38px;">R${custo_peca:.2f}</h1>
                     </div>
                 """,
                 unsafe_allow_html=True)
@@ -366,8 +378,8 @@ def dashboard():
             st.markdown(
                 f"""
                     <div style="border: 3px solid #e2e2e2; border-radius: 5px; padding: 1px; text-align: center; width: 140px; height: 50px; font-family: 'Arial', sans-serif; background-color: #7FFFD4; box-shadow: inset 0 0 40px rgba(0, 0, 0, 1)">
-                        <h2 style="color: #008080; font-size: 12px; font-weight: bold; margin-bottom: -25px; margin-top: -18px;">Total Pago</h2>
-                        <h1 style="color: #4CAF50; font-size: 25px; font-weight: normal; margin-top: -38px;">R${contas_pagas:.2f}</h1>
+                        <h2 style="color: #008080; font-size: 12px; font-weight: bold; margin-bottom: -25px; margin-top: -18px;">Preço Recomendado</h2>
+                        <h1 style="color: #4CAF50; font-size: 25px; font-weight: normal; margin-top: -38px;">R${preco_recomendado:.2f}</h1>
                     </div>
                 """,
                 unsafe_allow_html=True)

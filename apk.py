@@ -267,7 +267,7 @@ def dashboard():
                 f"""
                     <div style="border: 3px solid #e2e2e2; border-radius: 0.1px; padding: 1px; text-align: center; width: 150px; height: 50px; font-family: 'Arial', sans-serif; background-color: #7FFFD4;">
                         <h2 style="color: #008080; font-size: 12px; font-weight: bold; margin-bottom: -25px; margin-top: -18px;">Gasto Total</h2>
-                        <h1 style="color: #4CAF50; font-size: 25px; font-weight: normal; margin-top: -38px;">R${gasto_total}</h1>
+                        <h1 style="color: #4CAF50; font-size: 25px; font-weight: normal; margin-top: -38px;">R${gasto_total:.2f}</h1>
                     </div>
                 """,
                 unsafe_allow_html=True)
@@ -302,6 +302,8 @@ def dashboard():
                 """,
                 unsafe_allow_html=True)
             
+        st.write("<div style='height: 20px;'></div>", unsafe_allow_html=True)
+            
         col_b1, col_b2, col_b3, col_b4 = st.columns(4)
 
         with col_b1:
@@ -309,7 +311,7 @@ def dashboard():
                 f"""
                     <div style="border: 3px solid #e2e2e2; border-radius: 0.1px; padding: 1px; text-align: center; width: 150px; height: 50px; font-family: 'Arial', sans-serif; background-color: #7FFFD4;">
                         <h2 style="color: #008080; font-size: 12px; font-weight: bold; margin-bottom: -25px; margin-top: -18px;">Total Pago</h2>
-                        <h1 style="color: #4CAF50; font-size: 25px; font-weight: normal; margin-top: -38px;">R${contas_pagas}</h1>
+                        <h1 style="color: #4CAF50; font-size: 25px; font-weight: normal; margin-top: -38px;">R${contas_pagas:.2f}</h1>
                     </div>
                 """,
                 unsafe_allow_html=True)
@@ -319,7 +321,7 @@ def dashboard():
                 f"""
                     <div style="border: 3px solid #e2e2e2; border-radius: 0.1px; padding: 1px; text-align: center; width: 150px; height: 50px; font-family: 'Arial', sans-serif; background-color: #7FFFD4;">
                         <h2 style="color: #008080; font-size: 12px; font-weight: bold; margin-bottom: -25px; margin-top: -18px;">Dívida</h2>
-                        <h1 style="color: #4CAF50; font-size: 25px; font-weight: normal; margin-top: -38px;">R${dividas}</h1>
+                        <h1 style="color: #4CAF50; font-size: 25px; font-weight: normal; margin-top: -38px;">R${dividas:.2f}</h1>
                     </div>
                 """,
                 unsafe_allow_html=True)

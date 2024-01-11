@@ -320,7 +320,7 @@ def dashboard():
             
         st.write("<div style='height: 15px;'></div>", unsafe_allow_html=True)
             
-        col_b1, col_b2, col_b3, col_b4, col_b5 = st.columns(4)
+        col_b1, col_b2, col_b3, col_b4, col_b5 = st.columns(5)
 
         with col_b1:
             st.markdown(

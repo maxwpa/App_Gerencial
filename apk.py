@@ -31,6 +31,11 @@ def registrar_compra():
             valor_entrada REAL NOT NULL,
             valor_parcela REAL NOT NULL,
             data_pagamento DATETIME NOT NULL,
+            parcelas_pagas INTERGER NOT NULL,
+            parcelas_restantes INTERGER NOT NULL,
+            proxima_parcela DATETIME NOT NULL,
+            amortizado REAL BOT NULL,
+            divida REAL NOT NULL,
             fornecedor TEXT NOT NULL,
             data_entrega DATETIME NOT NULL,
             custo_unitario REAL NOT NULL,
@@ -41,13 +46,13 @@ def registrar_compra():
 
 registrar_compra()
     
-def inserir_dados(id_produto, produto, tamanho, genero, publico, quantidade, data_compra, preco, custos_adicionais, pagamento, forma_de_pagamento, parcela, valor_entrada, valor_parcela, data_pagamento, fornecedor, data_entrega, custo_unitario, custo_final):
+def inserir_dados(id_produto, produto, tamanho, genero, publico, quantidade, data_compra, preco, custos_adicionais, pagamento, forma_de_pagamento, parcela, valor_entrada, valor_parcela, data_pagamento, parcelas_pagas, parcelas_restantes, proxima_parcela, amortizado, divida, fornecedor, data_entrega, custo_unitario, custo_final):
     cursor.execute('''
         INSERT INTO compras (
             id_produto, produto, tamanho, genero, publico, quantidade, data_compra, preco, custos_adicionais, pagamento,
-            forma_de_pagamento, parcelas, valor_entrada, valor_parcela, data_pagamento, fornecedor, data_entrega, custo_unitario, custo_final
-        ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
-    ''', (id_produto, produto, tamanho, genero, publico, quantidade, data_compra, preco, custos_adicionais, pagamento, forma_de_pagamento, parcela, valor_entrada, valor_parcela, data_pagamento, fornecedor, data_entrega, custo_unitario, custo_final))
+            forma_de_pagamento, parcelas, valor_entrada, valor_parcela, data_pagamento, parcelas_pagas, parcelas_restantes, proxima_parcela, amortizado, divida, fornecedor, data_entrega, custo_unitario, custo_final
+        ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+    ''', (id_produto, produto, tamanho, genero, publico, quantidade, data_compra, preco, custos_adicionais, pagamento, forma_de_pagamento, parcela, valor_entrada, valor_parcela, data_pagamento, parcelas_pagas, parcelas_restantes, proxima_parcela, amortizado, divida, fornecedor, data_entrega, custo_unitario, custo_final))
     conn.commit()
     
 def acesso():
@@ -111,12 +116,13 @@ def coleta():
         
         hoje = datetime.now().date()
         relativa_delta = relativedelta(hoje, data_pagamento)
-        numero_parcelas_pagas = relativa_delta.years * 12 + relativa_delta.months
+        parcelas_pagas = relativa_delta.years * 12 + relativa_delta.months
+        parcelas_restantes = parcelamento - parcelas_pagas
         
-        data_proxima_parcela = data_pagamento + relativedelta(months=numero_parcelas_pagas + 1)
+        #proxima_parcela = data_pagamento + relativedelta(months=parcelas_pagas + 1)
         
-        amortizado = numero_parcelas_paga * valor_parcela + valor_entrada
-        divida = max(parcelamento - numero_parcelas_pagas, 0) * valor_parcela
+        amortizado = parcelas_pagas * valor_parcela + valor_entrada
+        divida = max(parcelamento - parcelas_pagas, 0) * valor_parcela
 
         fornecedor = st.text_input('Fornecedor').upper()
 
@@ -133,8 +139,14 @@ def coleta():
 
         if pagamento == 'À Vista':
             custo_final = preco + custos_adicionais
+            parcelas_pagas = 0
+            parcelas_restantes = 0
+            proxima_parcela = data_pagamento
+            amortizado = preco
+            divida = 0
         else:
             custo_final = valor_parcela * parcelamento + valor_entrada + custos_adicionais
+            proxima_parcela = data_pagamento + relativedelta(months=parcelas_pagas)
 
 
         custo_unitario = round(custo_unitario, 2)
@@ -146,7 +158,7 @@ def coleta():
 
         if registrar_compra:
             if campos_preenchidos:
-                inserir_dados(id_produto, produto, tamanho, genero, publico, quantidade, data_compra, preco, custos_adicionais, pagamento, forma_de_pagamento, parcelamento, valor_entrada, valor_parcela, data_pagamento, fornecedor, data_entrega, custo_unitario, custo_final)
+                inserir_dados(id_produto, produto, tamanho, genero, publico, quantidade, data_compra, preco, custos_adicionais, pagamento, forma_de_pagamento, parcelamento, valor_entrada, valor_parcela, data_pagamento, parcelas_pagas, parcelas_restantes, proxima_parcela, amortizado, divida, fornecedor, data_entrega, custo_unitario, custo_final)
 
                 st.success("Compra cadastrada com sucesso!")
             else:
@@ -229,6 +241,10 @@ def dashboard():
             qtd_comprada = df_compras_filtrado['quantidade'].sum()
             mais_comprado = df_compras_filtrado['produto'].value_counts().idxmax()
             pri_fornecedor = df_compras_filtrado['fornecedor'].value_counts().idxmax()
+            contas_pagas = df_compras_filtrado['amortizado'].sum() + df_compras_filtrado['custo adicional'].sum()
+            dividas = df_compras_filtrado['divida'].sum()
+            pagamentos_restantes = df_compras_filtrado['parcelas_restantes'].sum()
+            proximo_pagamento = df_compras_filtrado['proxima_parcela'].min()
 
             pie_chart_stream = plot_pie_chart(df_compras_filtrado)
 
@@ -237,12 +253,16 @@ def dashboard():
             qtd_comprada = df_compras['quantidade'].sum()
             mais_comprado = df_compras['produto'].value_counts().idxmax()
             pri_fornecedor = df_compras['fornecedor'].value_counts().idxmax()
+            contas_pagas = df_compras['amortizado'].sum() + df_compras['custo adicional'].sum()
+            dividas = df_compras['divida'].sum()
+            pagamentos_restantes = df_compras['parcelas_restantes'].sum()
+            proximo_pagamento = df_compras['proxima_parcela'].min()
             
             pie_chart_stream = plot_pie_chart(df_compras)
             
-        col1, col2, col3, col4 = st.columns(4)
+        col_a1, col_a2, col_a3, col_a4 = st.columns(4)
 
-        with col1:
+        with col_a1:
             st.markdown(
                 f"""
                     <div style="border: 3px solid #e2e2e2; border-radius: 0.1px; padding: 1px; text-align: center; width: 150px; height: 50px; font-family: 'Arial', sans-serif; background-color: #7FFFD4;">
@@ -252,7 +272,7 @@ def dashboard():
                 """,
                 unsafe_allow_html=True)
 
-        with col2:
+        with col_a2:
             st.markdown(
                 f"""
                     <div style="border: 3px solid #e2e2e2; border-radius: 0.1px; padding: 1px; text-align: center; width: 150px; height: 50px; font-family: 'Arial', sans-serif; background-color: #7FFFD4;">
@@ -262,7 +282,7 @@ def dashboard():
                 """,
                 unsafe_allow_html=True)
 
-        with col3:
+        with col_a3:
             st.markdown(
                 f"""
                     <div style="border: 3px solid #e2e2e2; border-radius: 0.1px; padding: 1px; text-align: center; width: 150px; height: 50px; font-family: 'Arial', sans-serif; background-color: #7FFFD4;">
@@ -272,12 +292,54 @@ def dashboard():
                 """,
                 unsafe_allow_html=True)
 
-        with col4:
+        with col_a4:
             st.markdown(
                 f"""
                     <div style="border: 3px solid #e2e2e2; border-radius: 0.1px; padding: 1px; text-align: center; width: 150px; height: 50px; font-family: 'Arial', sans-serif; background-color: #7FFFD4;">
                         <h2 style="color: #008080; font-size: 12px; font-weight: bold; margin-bottom: -25px; margin-top: -18px;">Principal Fornecedor</h2>
                         <h1 style="color: #4CAF50; font-size: 20px; font-weight: normal; margin-top: -35px;">{pri_fornecedor}</h1>
+                    </div>
+                """,
+                unsafe_allow_html=True)
+            
+        col_b1, col_b2, col_b3, col_b4 = st.columns(4)
+
+        with col_b1:
+            st.markdown(
+                f"""
+                    <div style="border: 3px solid #e2e2e2; border-radius: 0.1px; padding: 1px; text-align: center; width: 150px; height: 50px; font-family: 'Arial', sans-serif; background-color: #7FFFD4;">
+                        <h2 style="color: #008080; font-size: 12px; font-weight: bold; margin-bottom: -25px; margin-top: -18px;">Total Pago</h2>
+                        <h1 style="color: #4CAF50; font-size: 25px; font-weight: normal; margin-top: -38px;">R${contas_pagas}</h1>
+                    </div>
+                """,
+                unsafe_allow_html=True)
+
+        with col_b2:
+            st.markdown(
+                f"""
+                    <div style="border: 3px solid #e2e2e2; border-radius: 0.1px; padding: 1px; text-align: center; width: 150px; height: 50px; font-family: 'Arial', sans-serif; background-color: #7FFFD4;">
+                        <h2 style="color: #008080; font-size: 12px; font-weight: bold; margin-bottom: -25px; margin-top: -18px;">Dívida Total</h2>
+                        <h1 style="color: #4CAF50; font-size: 25px; font-weight: normal; margin-top: -38px;">R${dividas}</h1>
+                    </div>
+                """,
+                unsafe_allow_html=True)
+
+        with col_b3:
+            st.markdown(
+                f"""
+                    <div style="border: 3px solid #e2e2e2; border-radius: 0.1px; padding: 1px; text-align: center; width: 150px; height: 50px; font-family: 'Arial', sans-serif; background-color: #7FFFD4;">
+                        <h2 style="color: #008080; font-size: 12px; font-weight: bold; margin-bottom: -25px; margin-top: -18px;">Qtd. Contas à Pagar</h2>
+                        <h1 style="color: #4CAF50; font-size: 30px; font-weight: normal; margin-top: -40px;">{pagamentos_restantes}</h1>
+                    </div>
+                """,
+                unsafe_allow_html=True)
+
+        with col_b4:
+            st.markdown(
+                f"""
+                    <div style="border: 3px solid #e2e2e2; border-radius: 0.1px; padding: 1px; text-align: center; width: 150px; height: 50px; font-family: 'Arial', sans-serif; background-color: #7FFFD4;">
+                        <h2 style="color: #008080; font-size: 12px; font-weight: bold; margin-bottom: -25px; margin-top: -18px;">Próximo Pagamento</h2>
+                        <h1 style="color: #4CAF50; font-size: 20px; font-weight: normal; margin-top: -35px;">{proximo_pagamento}</h1>
                     </div>
                 """,
                 unsafe_allow_html=True)

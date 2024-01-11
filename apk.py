@@ -266,7 +266,7 @@ def dashboard():
             st.markdown(
                 f"""
                     <div style="border: 3px solid #e2e2e2; border-radius: 0.1px; padding: 1px; text-align: center; width: 150px; height: 50px; font-family: 'Arial', sans-serif; background-color: #7FFFD4;">
-                        <h2 style="color: #008080; font-size: 12px; font-weight: bold; margin-bottom: -25px; margin-top: -18px;">Gasto Total com Compras</h2>
+                        <h2 style="color: #008080; font-size: 12px; font-weight: bold; margin-bottom: -25px; margin-top: -18px;">Gasto Total</h2>
                         <h1 style="color: #4CAF50; font-size: 25px; font-weight: normal; margin-top: -38px;">R${gasto_total}</h1>
                     </div>
                 """,
@@ -286,7 +286,7 @@ def dashboard():
             st.markdown(
                 f"""
                     <div style="border: 3px solid #e2e2e2; border-radius: 0.1px; padding: 1px; text-align: center; width: 150px; height: 50px; font-family: 'Arial', sans-serif; background-color: #7FFFD4;">
-                        <h2 style="color: #008080; font-size: 12px; font-weight: bold; margin-bottom: -25px; margin-top: -18px;">Mais Comprado</h2>
+                        <h2 style="color: #008080; font-size: 12px; font-weight: bold; margin-bottom: -25px; margin-top: -18px;">Prod. Mais Comprado</h2>
                         <h1 style="color: #4CAF50; font-size: 20px; font-weight: normal; margin-top: -35px;">{mais_comprado}</h1>
                     </div>
                 """,
@@ -318,7 +318,7 @@ def dashboard():
             st.markdown(
                 f"""
                     <div style="border: 3px solid #e2e2e2; border-radius: 0.1px; padding: 1px; text-align: center; width: 150px; height: 50px; font-family: 'Arial', sans-serif; background-color: #7FFFD4;">
-                        <h2 style="color: #008080; font-size: 12px; font-weight: bold; margin-bottom: -25px; margin-top: -18px;">Dívida Total</h2>
+                        <h2 style="color: #008080; font-size: 12px; font-weight: bold; margin-bottom: -25px; margin-top: -18px;">Dívida</h2>
                         <h1 style="color: #4CAF50; font-size: 25px; font-weight: normal; margin-top: -38px;">R${dividas}</h1>
                     </div>
                 """,

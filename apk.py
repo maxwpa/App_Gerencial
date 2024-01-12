@@ -193,26 +193,65 @@ def tabela():
         else:
             st.dataframe(df_compras)
             
-def plot_pie_chart(df, image_width=300, image_height=260):
+def plot_pie_chart(df, image_width=1000, image_height=860):
     df_agrupado = df.groupby('produto')['custo_final'].sum().reset_index()
+    
+    colors = plt.cm.Set1.colors[:len(df_agrupado)]
 
-    fig, ax = plt.subplots(figsize=(image_width / 100, image_height / 100))
+    fig, ax = plt.subplots(figsize=(image_width / 100, image_height / 140))
+
+    font_size = 20
     
+    total_custo = df_agrupado['custo_final'].sum()
     
-    font_size = 12
+    # Calcula os valores em R$ e formata para exibição
+    valores_r = df_agrupado['custo_final'].map('R${:,.2f}'.format)
     
     wedges, texts, autotexts = ax.pie(
         df_agrupado['custo_final'],
-        labels=df_agrupado['produto'],
-        autopct='%1.1f%%',
+        labels=[f"{produto}\n({valor})" for produto, valor in zip(df_agrupado['produto'], valores_r)],
+        autopct='',
         startangle=90,
         textprops=dict(color="w", size=font_size, weight='bold'),
         wedgeprops=dict(width=0.4),
-        radius=0.9
+        radius=0.9,
+        colors=colors
     )
 
     ax.axis('equal')
 
+    for text, autotext in zip(texts, autotexts):
+        text.set_fontsize(font_size)
+        autotext.set_fontsize(font_size)
+
+    image_stream = BytesIO()
+    plt.savefig(image_stream, format='png', transparent=True)
+    plt.close(fig)
+
+    return image_stream
+
+def quantidade_por_fornecedor(df, image_width=1000, image_height=860):
+    
+    df_agrupado = df.groupby('fornecedor')['quantidade'].sum().reset_index()
+
+    colors = plt.cm.Set2.colors[:len(df_agrupado)]
+    
+    fig, ax = plt.subplots(figsize=(image_width / 100, image_height / 140))   
+    
+    font_size = 20
+    
+    wedges, texts, autotexts = ax.pie(
+        df_agrupado['quantidade'],
+        labels=df_agrupado['fornecedor'],
+        autopct='%1.1f%%',
+        startangle=90,
+        textprops=dict(color="w", size=font_size, weight='bold'),
+        wedgeprops=dict(width=0.4),
+        radius=0.9,
+        colors=colors
+    )
+
+    ax.axis('equal')
     
     for text in texts + autotexts:
         text.set_fontsize(font_size)
@@ -250,9 +289,9 @@ def dashboard():
             dividas = df_compras_filtrado['divida'].sum()
             pagamentos_restantes = df_compras_filtrado['parcelas_restantes'].sum()
             proximo_pagamento_str = df_compras_filtrado['proxima_parcela'].min()
-            custo_peca = df_compras_filtrado['custo_unitario'].mean()          
+            custo_peca = df_compras_filtrado['custo_unitario'].mean()
 
-            pie_chart_stream = plot_pie_chart(df_compras_filtrado)
+            qtd_fornecedor = quantidade_por_fornecedor(df_compras_filtrado)
 
         else:
             gasto_total = df_compras['custo_final'].sum()
@@ -265,8 +304,9 @@ def dashboard():
             proximo_pagamento_str = df_compras['proxima_parcela'].min()
             custo_peca = df_compras['custo_unitario'].mean()
             
-            
             pie_chart_stream = plot_pie_chart(df_compras)
+            qtd_fornecedor = quantidade_por_fornecedor(df_compras)
+            
         if proximo_pagamento_str != 'PAGO':
             proximo_pagamento = datetime.strptime(proximo_pagamento_str, '%Y-%m-%d')
             data_atual = datetime.now()
@@ -284,9 +324,9 @@ def dashboard():
         with col_a1:
             st.markdown(
                 f"""
-                    <div style="border: 3px solid #e2e2e2; border-radius: 5px; padding: 1px; text-align: center; width: 140px; height: 50px; font-family: 'Arial', sans-serif; background-color: #7FFFD4; box-shadow: inset 0 0 40px rgba(0, 0, 0, 1);">
-                        <h2 style="color: #008080; font-size: 12px; font-weight: bold; margin-bottom: -25px; margin-top: -18px;">Gasto Total</h2>
-                        <h1 style="color: #4CAF50; font-size: 25px; font-weight: normal; margin-top: -38px;">R${gasto_total:.2f}</h1>
+                    <div style="border: 3px solid #e2e2e2; border-radius: 5px; padding: 1px; text-align: center; width: 140px; height: 50px; font-family: 'Arial', sans-serif; box-shadow: inset 0 0 40px rgba(0, 0, 0, 1);">
+                        <h2 style="color: #7FFFD4; font-size: 12px; font-weight: bold; margin-bottom: -25px; margin-top: -18px;">Gasto Total</h2>
+                        <h1 style="color: #FFFFFF; font-size: 25px; font-weight: normal; margin-top: -38px;">R${gasto_total:.2f}</h1>
                     </div>
                 """,
                 unsafe_allow_html=True)
@@ -294,9 +334,9 @@ def dashboard():
         with col_a2:
             st.markdown(
                 f"""
-                    <div style="border: 3px solid #e2e2e2; border-radius: 5px; padding: 1px; text-align: center; width: 140px; height: 50px; font-family: 'Arial', sans-serif; background-color: #7FFFD4; box-shadow: inset 0 0 40px rgba(0, 0, 0, 1)">
-                        <h2 style="color: #008080; font-size: 12px; font-weight: bold; margin-bottom: -25px; margin-top: -18px;">Total Pago</h2>
-                        <h1 style="color: #4CAF50; font-size: 25px; font-weight: normal; margin-top: -38px;">R${contas_pagas:.2f}</h1>
+                    <div style="border: 3px solid #e2e2e2; border-radius: 5px; padding: 1px; text-align: center; width: 140px; height: 50px; font-family: 'Arial', sans-serif; background-color: #556B2F; box-shadow: inset 0 0 40px rgba(0, 0, 0, 1)">
+                        <h2 style="color: #7FFFD4; font-size: 12px; font-weight: bold; margin-bottom: -25px; margin-top: -18px;">Total Pago</h2>
+                        <h1 style="color: #FFFFFF; font-size: 25px; font-weight: normal; margin-top: -38px;">R${contas_pagas:.2f}</h1>
                     </div>
                 """,
                 unsafe_allow_html=True)
@@ -304,9 +344,9 @@ def dashboard():
         with col_a3:
             st.markdown(
                 f"""
-                    <div style="border: 3px solid #e2e2e2; border-radius: 5px; padding: 1px; text-align: center; width: 140px; height: 50px; font-family: 'Arial', sans-serif; background-color: #7FFFD4; box-shadow: inset 0 0 40px rgba(0, 0, 0, 1)">
-                        <h2 style="color: #008080; font-size: 12px; font-weight: bold; margin-bottom: -25px; margin-top: -18px;">Contas à Pagar</h2>
-                        <h1 style="color: #4CAF50; font-size: 25px; font-weight: normal; margin-top: -38px;">R${dividas:.2f}</h1>
+                    <div style="border: 3px solid #e2e2e2; border-radius: 5px; padding: 1px; text-align: center; width: 140px; height: 50px; font-family: 'Arial', sans-serif; background-color: #2F4F4F; box-shadow: inset 0 0 40px rgba(0, 0, 0, 1)">
+                        <h2 style="color: #7FFFD4; font-size: 12px; font-weight: bold; margin-bottom: -25px; margin-top: -18px;">Contas à Pagar</h2>
+                        <h1 style="color: #F5F5DC; font-size: 25px; font-weight: normal; margin-top: -38px;">R${dividas:.2f}</h1>
                     </div>
                 """,
                 unsafe_allow_html=True)
@@ -314,7 +354,7 @@ def dashboard():
         with col_a4:
             st.markdown(
                 f"""
-                    <div style="border: 3px solid #e2e2e2; border-radius: 5px; padding: 1px; text-align: center; width: 140px; height: 50px; font-family: 'Arial', sans-serif; background-color: #7FFFD4; box-shadow: inset 0 0 40px rgba(0, 0, 0, 1)">
+                    <div style="border: 3px solid #e2e2e2; border-radius: 5px; padding: 1px; text-align: center; width: 140px; height: 50px; font-family: 'Arial', sans-serif; background-color: #006400; box-shadow: inset 0 0 40px rgba(0, 0, 0, 1)">
                         <h2 style="color: #008080; font-size: 12px; font-weight: bold; margin-bottom: -25px; margin-top: -18px;">Qtd. Contas à Pagar</h2>
                         <h1 style="color: #4CAF50; font-size: 30px; font-weight: normal; margin-top: -40px;">{pagamentos_restantes}</h1>
                     </div>
@@ -324,7 +364,7 @@ def dashboard():
         with col_a5:
             st.markdown(
                 f"""
-                    <div style="border: 3px solid #e2e2e2; border-radius: 5px; padding: 1px; text-align: center; width: 140px; height: 50px; font-family: 'Arial', sans-serif; background-color: #7FFFD4; box-shadow: inset 0 0 40px rgba(0, 0, 0, 1)">
+                    <div style="border: 3px solid #e2e2e2; border-radius: 5px; padding: 1px; text-align: center; width: 140px; height: 50px; font-family: 'Arial', sans-serif; background-color: #191970; box-shadow: inset 0 0 40px rgba(0, 0, 0, 1)">
                         <h2 style="color: #008080; font-size: 12px; font-weight: bold; margin-bottom: -25px; margin-top: -18px;">Próximo Vencimento</h2>
                         <h1 style="color: #4CAF50; font-size: 20px; font-weight: normal; margin-top: -35px;">{vencimento}</h1>
                     </div>
@@ -338,7 +378,7 @@ def dashboard():
         with col_b1:
             st.markdown(
                 f"""
-                    <div style="border: 3px solid #e2e2e2; border-radius: 5px; padding: 1px; text-align: center; width: 140px; height: 50px; font-family: 'Arial', sans-serif; background-color: #7FFFD4; box-shadow: inset 0 0 40px rgba(0, 0, 0, 1)">
+                    <div style="border: 3px solid #e2e2e2; border-radius: 5px; padding: 1px; text-align: center; width: 140px; height: 50px; font-family: 'Arial', sans-serif; background-color: #000000; box-shadow: inset 0 0 40px rgba(0, 0, 0, 1)">
                         <h2 style="color: #008080; font-size: 12px; font-weight: bold; margin-bottom: -25px; margin-top: -18px;">Qtd. de Produtos</h2>
                         <h1 style="color: #4CAF50; font-size: 30px; font-weight: normal; margin-top: -40px;">{qtd_comprada}</h1>
                     </div>
@@ -352,7 +392,7 @@ def dashboard():
                 fonte = 19
             st.markdown(
                 f"""
-                    <div style="border: 3px solid #e2e2e2; border-radius: 5px; padding: 1px; text-align: center; width: 140px; height: 50px; font-family: 'Arial', sans-serif; background-color: #7FFFD4; box-shadow: inset 0 0 40px rgba(0, 0, 0, 1)">
+                    <div style="border: 3px solid #e2e2e2; border-radius: 5px; padding: 1px; text-align: center; width: 140px; height: 50px; font-family: 'Arial', sans-serif; background-color: #8B4513; box-shadow: inset 0 0 40px rgba(0, 0, 0, 1)">
                         <h2 style="color: #008080; font-size: 12px; font-weight: bold; margin-bottom: -25px; margin-top: -18px;">Prod. Mais Comprado</h2>
                         <h1 style="color: #4CAF50; font-size: {fonte}px; font-weight: normal; margin-top: -35px;">{mais_comprado}</h1>
                     </div>
@@ -362,7 +402,7 @@ def dashboard():
         with col_b3:
             st.markdown(
                 f"""
-                    <div style="border: 3px solid #e2e2e2; border-radius: 5px; padding: 1px; text-align: center; width: 140px; height: 50px; font-family: 'Arial', sans-serif; background-color: #7FFFD4; box-shadow: inset 0 0 40px rgba(0, 0, 0, 1)">
+                    <div style="border: 3px solid #e2e2e2; border-radius: 5px; padding: 1px; text-align: center; width: 140px; height: 50px; font-family: 'Arial', sans-serif; background-color: #800000; box-shadow: inset 0 0 40px rgba(0, 0, 0, 1)">
                         <h2 style="color: #008080; font-size: 12px; font-weight: bold; margin-bottom: -25px; margin-top: -18px;">Principal Fornecedor</h2>
                         <h1 style="color: #4CAF50; font-size: 20px; font-weight: normal; margin-top: -35px;">{pri_fornecedor}</h1>
                     </div>
@@ -372,7 +412,7 @@ def dashboard():
         with col_b4:
             st.markdown(
                 f"""
-                    <div style="border: 3px solid #e2e2e2; border-radius: 5px; padding: 1px; text-align: center; width: 140px; height: 50px; font-family: 'Arial', sans-serif; background-color: #7FFFD4; box-shadow: inset 0 0 40px rgba(0, 0, 0, 1)">
+                    <div style="border: 3px solid #e2e2e2; border-radius: 5px; padding: 1px; text-align: center; width: 140px; height: 50px; font-family: 'Arial', sans-serif; background-color: #8B0000; box-shadow: inset 0 0 40px rgba(0, 0, 0, 1)">
                         <h2 style="color: #008080; font-size: 12px; font-weight: bold; margin-bottom: -25px; margin-top: -18px;">Custo Unitário</h2>
                         <h1 style="color: #4CAF50; font-size: 25px; font-weight: normal; margin-top: -38px;">R${custo_peca:.2f}</h1>
                     </div>
@@ -382,26 +422,38 @@ def dashboard():
         with col_b5:
             st.markdown(
                 f"""
-                    <div style="border: 3px solid #e2e2e2; border-radius: 5px; padding: 1px; text-align: center; width: 140px; height: 50px; font-family: 'Arial', sans-serif; background-color: #7FFFD4; box-shadow: inset 0 0 40px rgba(0, 0, 0, 1)">
+                    <div style="border: 3px solid #e2e2e2; border-radius: 5px; padding: 1px; text-align: center; width: 140px; height: 50px; font-family: 'Arial', sans-serif; background-color: #A52A2A; box-shadow: inset 0 0 40px rgba(0, 0, 0, 1)">
                         <h2 style="color: #008080; font-size: 12px; font-weight: bold; margin-bottom: -25px; margin-top: -18px;">Preço Recomendado</h2>
                         <h1 style="color: #4CAF50; font-size: 25px; font-weight: normal; margin-top: -38px;">R${preco_recomendado:.2f}</h1>
                     </div>
                 """,
                 unsafe_allow_html=True)
         
-        #st.write("<div style='height: 5px;'></div>", unsafe_allow_html=True)
+        st.write("<div style='height: 5px;'></div>", unsafe_allow_html=True)
         
-        colu1, colu2 = st.columns(2)
+        col_c1, col_c2 = st.columns(2)
        
-        with colu1:
+        with col_c1:
             image_base64 = base64.b64encode(pie_chart_stream.getvalue()).decode()
-            html_code = f"""
-                <div style="border: 3px solid #e2e2e2; border-radius: 5px; padding: 1px; text-align: center; width: 285px; height: 195px; font-family: 'Arial', sans-serif; background-color: #008080; box-shadow: inset 0 0 40px rgba(0, 0, 0, 1)">
+            st.markdown(
+                f"""
+                <div style="border: 3px solid #e2e2e2; border-radius: 5px; padding: 1px; text-align: center; width: 355px; height: 218px; font-family: 'Arial', sans-serif; box-shadow: inset 0 0 40px rgba(0, 0, 0, 1)">
                     <h2 style="color: #7FFFD4; font-size: 12px; font-weight: bold; margin-bottom: -25px; margin-top: -18px;">Gasto Por Produto</h2>
-                    <img src="data:image/png;base64, {image_base64}" alt="Gastos Por Produtos" style="width: 220px; height: 190px; border-radius: 10px;">
+                    <img src="data:image/png;base64, {image_base64}" alt="Gastos Por Produtos" style="width: 340px; height: 205px; border-radius: 10px;">
                 </div>
-            """
-        st.markdown(html_code, unsafe_allow_html=True)
+            """,
+                unsafe_allow_html=True)
+        
+        with col_c2:
+            image_base64 = base64.b64encode(qtd_fornecedor.getvalue()).decode()
+            st.markdown(
+                f"""
+                <div style="border: 3px solid #e2e2e2; border-radius: 5px; padding: 1px; text-align: center; width: 355px; height: 218px; font-family: 'Arial', sans-serif; box-shadow: inset 0 0 40px rgba(0, 0, 0, 1)">
+                    <h2 style="color: #7FFFD4; font-size: 12px; font-weight: bold; margin-bottom: -25px; margin-top: -18px;">Qtd. Comprada por Fornecedor</h2>
+                    <img src="data:image/png;base64, {image_base64}" alt="Qtd. Comprada por Fornecedor" style="width: 340px; height: 205px; border-radius: 10px;">
+                </div>
+            """,
+                unsafe_allow_html=True)
         
         
 

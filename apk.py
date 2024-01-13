@@ -6,7 +6,7 @@ import base64
 import sqlite3
 import random
 import string
-from datetime import datetime
+from datetime import datetime, date
 from dateutil.relativedelta import relativedelta
 
 conn = sqlite3.connect('dados_compras.db')
@@ -114,15 +114,15 @@ def coleta():
             valor_entrada = st.number_input('Valor Pago na Entrada', step=0.01, format="%.2f")
             valor_parcela = st.number_input('Valor das Parcelas', step=0.01, format="%.2f")
 
-        data_pagamento = st.date_input('Data do Pagamento À Vista ou Primeira Parcela:')
+        data_pagamento = st.date_input('Data do Pagamento À Vista ou Primeira Parcela:', datetime.now().date())
         
         hoje = datetime.now().date()
-        relativa_delta = relativedelta(hoje, data_pagamento)
-        parcelas_pagas = relativa_delta.years * 12 + relativa_delta.months
+        par_pagas = relativedelta(hoje, data_pagamento)
+        parcelas_pagas = par_pagas.years * 12 + par_pagas.months
         parcelas_restantes = parcelamento - parcelas_pagas
         
         amortizado = parcelas_pagas * valor_parcela + valor_entrada
-        divida = max(parcelamento - parcelas_pagas, 0) * valor_parcela
+        divida = parcelas_restantes * valor_parcela
 
         fornecedor = st.text_input('Fornecedor').upper()
 
@@ -204,7 +204,6 @@ def plot_pie_chart(df, image_width=1000, image_height=860):
     
     total_custo = df_agrupado['custo_final'].sum()
     
-    # Calcula os valores em R$ e formata para exibição
     valores_r = df_agrupado['custo_final'].map('R${:,.2f}'.format)
     
     wedges, texts, autotexts = ax.pie(
@@ -290,7 +289,8 @@ def dashboard():
             pagamentos_restantes = df_compras_filtrado['parcelas_restantes'].sum()
             proximo_pagamento_str = df_compras_filtrado['proxima_parcela'].min()
             custo_peca = df_compras_filtrado['custo_unitario'].mean()
-
+            
+            pie_chart_stream = plot_pie_chart(df_compras_filtrado)
             qtd_fornecedor = quantidade_por_fornecedor(df_compras_filtrado)
 
         else:

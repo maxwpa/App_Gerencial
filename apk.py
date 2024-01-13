@@ -33,11 +33,13 @@ def registrar_compra():
             data_pagamento DATETIME NOT NULL,
             parcelas_pagas INTERGER NOT NULL,
             parcelas_restantes INTERGER NOT NULL,
-            proxima_parcela DATETIME NOT NULL,
+            proxima_data DATETIME NOT NULL,
+            proxima_parcela INTEGER NOT NULL,
             amortizado REAL BOT NULL,
             divida REAL NOT NULL,
             fornecedor TEXT NOT NULL,
             data_entrega DATETIME NOT NULL,
+            juros INTEGER NOT NULL,
             custo_unitario REAL NOT NULL,
             custo_final REAL NOT NULL
         )
@@ -46,13 +48,13 @@ def registrar_compra():
 
 registrar_compra()
     
-def inserir_dados(id_produto, produto, tamanho, genero, publico, quantidade, data_compra, preco, custos_adicionais, pagamento, forma_de_pagamento, parcela, valor_entrada, valor_parcela, data_pagamento, parcelas_pagas, parcelas_restantes, proxima_parcela, amortizado, divida, fornecedor, data_entrega, custo_unitario, custo_final):
+def inserir_dados(id_produto, produto, tamanho, genero, publico, quantidade, data_compra, preco, custos_adicionais, pagamento, forma_de_pagamento, parcela, valor_entrada, valor_parcela, data_pagamento, parcelas_pagas, parcelas_restantes,  proxima_data, proxima_parcela, amortizado, divida, fornecedor, data_entrega, juros, custo_unitario, custo_final):
     cursor.execute('''
         INSERT INTO compras (
             id_produto, produto, tamanho, genero, publico, quantidade, data_compra, preco, custos_adicionais, pagamento,
-            forma_de_pagamento, parcelas, valor_entrada, valor_parcela, data_pagamento, parcelas_pagas, parcelas_restantes, proxima_parcela, amortizado, divida, fornecedor, data_entrega, custo_unitario, custo_final
-        ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
-    ''', (id_produto, produto, tamanho, genero, publico, quantidade, data_compra, preco, custos_adicionais, pagamento, forma_de_pagamento, parcela, valor_entrada, valor_parcela, data_pagamento, parcelas_pagas, parcelas_restantes, proxima_parcela, amortizado, divida, fornecedor, data_entrega, custo_unitario, custo_final))
+            forma_de_pagamento, parcelas, valor_entrada, valor_parcela, data_pagamento, parcelas_pagas, parcelas_restantes,  proxima_data, proxima_parcela, amortizado, divida, fornecedor, data_entrega, juros, custo_unitario, custo_final
+        ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+    ''', (id_produto, produto, tamanho, genero, publico, quantidade, data_compra, preco, custos_adicionais, pagamento, forma_de_pagamento, parcela, valor_entrada, valor_parcela, data_pagamento, parcelas_pagas, parcelas_restantes,  proxima_data, proxima_parcela, amortizado, divida, fornecedor, data_entrega, juros, custo_unitario, custo_final))
     conn.commit()
     
 def acesso():
@@ -117,8 +119,14 @@ def coleta():
         data_pagamento = st.date_input('Data do Pagamento À Vista ou Primeira Parcela:', datetime.now().date())
         
         hoje = datetime.now().date()
+
         par_pagas = relativedelta(hoje, data_pagamento)
-        parcelas_pagas = par_pagas.years * 12 + par_pagas.months
+
+        if hoje <= data_pagamento:
+            parcelas_pagas = 0
+        else:
+            parcelas_pagas = par_pagas.years * 12 + par_pagas.months + 1
+
         parcelas_restantes = parcelamento - parcelas_pagas
         
         amortizado = parcelas_pagas * valor_parcela + valor_entrada
@@ -141,14 +149,21 @@ def coleta():
             custo_final = preco + custos_adicionais
             parcelas_pagas = 0
             parcelas_restantes = 0
-            proxima_parcela = 'PAGO'
+            proxima_data = 'QUITADO'
+            proxima_parcela = 'QUITADO'
             amortizado = preco
             divida = 0
         else:
             custo_final = valor_parcela * parcelamento + valor_entrada + custos_adicionais
-            proxima_parcela = data_pagamento + relativedelta(months=parcelas_pagas)
+            if parcelas_restantes > 0:
+                proxima_data = data_pagamento + relativedelta(months=parcelas_pagas)
+                diferenca = proxima_data - hoje
+                proxima_parcela = diferenca.days
+            else:
+                proxima_data = 'QUITADO'
+                proxima_parcela = 'QUITADO'
 
-
+        juros = (amortizado + divida - preco) / preco
         custo_unitario = round(custo_unitario, 2)
         custo_final = round(custo_final, 2)
 
@@ -158,7 +173,7 @@ def coleta():
 
         if registrar_compra:
             if campos_preenchidos:
-                inserir_dados(id_produto, produto, tamanho, genero, publico, quantidade, data_compra, preco, custos_adicionais, pagamento, forma_de_pagamento, parcelamento, valor_entrada, valor_parcela, data_pagamento, parcelas_pagas, parcelas_restantes, proxima_parcela, amortizado, divida, fornecedor, data_entrega, custo_unitario, custo_final)
+                inserir_dados(id_produto, produto, tamanho, genero, publico, quantidade, data_compra, preco, custos_adicionais, pagamento, forma_de_pagamento, parcelamento, valor_entrada, valor_parcela, data_pagamento, parcelas_pagas, parcelas_restantes,  proxima_data, proxima_parcela, amortizado, divida, fornecedor, data_entrega, juros, custo_unitario, custo_final)
 
                 st.success("Compra cadastrada com sucesso!")
             else:
@@ -287,7 +302,7 @@ def dashboard():
             contas_pagas = df_compras_filtrado['amortizado'].sum() + df_compras_filtrado['custos_adicionais'].sum()
             dividas = df_compras_filtrado['divida'].sum()
             pagamentos_restantes = df_compras_filtrado['parcelas_restantes'].sum()
-            proximo_pagamento_str = df_compras_filtrado['proxima_parcela'].min()
+            dias_falta = df_compras_filtrado['proxima_parcela'].min()
             custo_peca = df_compras_filtrado['custo_unitario'].mean()
             
             pie_chart_stream = plot_pie_chart(df_compras_filtrado)
@@ -301,22 +316,22 @@ def dashboard():
             contas_pagas = df_compras['amortizado'].sum() + df_compras['custos_adicionais'].sum()
             dividas = df_compras['divida'].sum()
             pagamentos_restantes = df_compras['parcelas_restantes'].sum()
-            proximo_pagamento_str = df_compras['proxima_parcela'].min()
+            dias_falta = df_compras['proxima_parcela'].min()
             custo_peca = df_compras['custo_unitario'].mean()
             
             pie_chart_stream = plot_pie_chart(df_compras)
             qtd_fornecedor = quantidade_por_fornecedor(df_compras)
             
-        if proximo_pagamento_str != 'PAGO':
-            proximo_pagamento = datetime.strptime(proximo_pagamento_str, '%Y-%m-%d')
-            data_atual = datetime.now()
-            dias_falta = (proximo_pagamento - data_atual).days
+        if dias_falta != 'QUITADO':
             if dias_falta == 1:
                 vencimento = 'AMANHÃ'
+            elif dias_falta == 0:
+                vencimento = 'HOJE'
             else:
                 vencimento = f'EM {dias_falta} DIAS'
         else:
-            vencimento = 'PAGO'
+                vencimento = 'QUITADO'
+        
         preco_recomendado = custo_peca * 0.3 + custo_peca
             
         col_a1, col_a2, col_a3, col_a4, col_a5 = st.columns(5)

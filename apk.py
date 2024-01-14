@@ -13,7 +13,6 @@ conn = sqlite3.connect('dados_compras.db')
 cursor = conn.cursor()
     
 def registrar_compra():
-    
     cursor.execute('''
         CREATE TABLE IF NOT EXISTS compras (
             id_produto TEXT PRIMARY KEY,
@@ -31,11 +30,11 @@ def registrar_compra():
             valor_entrada REAL NOT NULL,
             valor_parcela REAL NOT NULL,
             data_pagamento DATETIME NOT NULL,
-            parcelas_pagas INTERGER NOT NULL,
-            parcelas_restantes INTERGER NOT NULL,
+            parcelas_pagas INTEGER NOT NULL,
+            parcelas_restantes INTEGER NOT NULL,
             proxima_data DATETIME NOT NULL,
             proxima_parcela INTEGER NOT NULL,
-            amortizado REAL BOT NULL,
+            amortizado REAL,
             divida REAL NOT NULL,
             fornecedor TEXT NOT NULL,
             data_entrega DATETIME NOT NULL,
@@ -46,43 +45,43 @@ def registrar_compra():
     ''')
     conn.commit()
 
-registrar_compra()
-    
 def inserir_dados(id_produto, produto, tamanho, genero, publico, quantidade, data_compra, preco, custos_adicionais, pagamento, forma_de_pagamento, parcela, valor_entrada, valor_parcela, data_pagamento, parcelas_pagas, parcelas_restantes,  proxima_data, proxima_parcela, amortizado, divida, fornecedor, data_entrega, juros, custo_unitario, custo_final):
     cursor.execute('''
         INSERT INTO compras (
             id_produto, produto, tamanho, genero, publico, quantidade, data_compra, preco, custos_adicionais, pagamento,
             forma_de_pagamento, parcelas, valor_entrada, valor_parcela, data_pagamento, parcelas_pagas, parcelas_restantes,  proxima_data, proxima_parcela, amortizado, divida, fornecedor, data_entrega, juros, custo_unitario, custo_final
-        ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+        ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
     ''', (id_produto, produto, tamanho, genero, publico, quantidade, data_compra, preco, custos_adicionais, pagamento, forma_de_pagamento, parcela, valor_entrada, valor_parcela, data_pagamento, parcelas_pagas, parcelas_restantes,  proxima_data, proxima_parcela, amortizado, divida, fornecedor, data_entrega, juros, custo_unitario, custo_final))
     conn.commit()
-    
 
-def registrar_datas(data_compra, data_pagamento, preco, custos_adicionais, pagamento, parcelamento, valor_parcela, parcelas_pagas, valor_entrada):
+def registrar_datas(id_produto, data_compra, data_pagamento, preco, custos_adicionais, pagamento, parcelamento, valor_parcela, parcelas_pagas, valor_entrada):
     cursor.execute('''
         CREATE TABLE IF NOT EXISTS datas (
+            id_produto TEXT,
             data DATETIME NOT NULL,
-            custo REAL NOT NULL
+            custo REAL NOT NULL,
+            FOREIGN KEY (id_produto) REFERENCES compras (id_produto)
         )
     ''')
+
     if pagamento == 'À Vista':
         cursor.execute('''
-            INSERT INTO datas (data, custo)
-            VALUES (?, ?)
-        ''', (data_compra, preco + custos_adicionais))
+            INSERT INTO datas (id_produto, data, custo)
+            VALUES (?, ?, ?)
+        ''', (id_produto, data_compra, preco + custos_adicionais))
     else:
         cursor.execute('''
-            INSERT INTO datas (data, custo)
-            VALUES (?, ?)
-        ''', (data_pagamento, valor_entrada + custos_adicionais))
+            INSERT INTO datas (id_produto, data, custo)
+            VALUES (?, ?, ?)
+        ''', (id_produto, data_pagamento, valor_entrada + custos_adicionais))
 
     if pagamento != 'À Vista':
         for i in range(parcelamento):
             data_parcela = data_pagamento + relativedelta(months=(parcelas_pagas + i)) 
             cursor.execute('''
-                INSERT INTO datas (data, custo)
-                VALUES (?, ?)
-            ''', (data_parcela, valor_parcela))
+                INSERT INTO datas (id_produto, data, custo)
+                VALUES (?, ?, ?)
+            ''', (id_produto, data_parcela, valor_parcela))
 
     conn.commit()
 

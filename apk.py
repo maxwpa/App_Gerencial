@@ -57,6 +57,36 @@ def inserir_dados(id_produto, produto, tamanho, genero, publico, quantidade, dat
     ''', (id_produto, produto, tamanho, genero, publico, quantidade, data_compra, preco, custos_adicionais, pagamento, forma_de_pagamento, parcela, valor_entrada, valor_parcela, data_pagamento, parcelas_pagas, parcelas_restantes,  proxima_data, proxima_parcela, amortizado, divida, fornecedor, data_entrega, juros, custo_unitario, custo_final))
     conn.commit()
     
+
+def registrar_datas(data_compra, data_pagamento, preco, custos_adicionais, pagamento, parcelamento, valor_parcela, parcelas_pagas, valor_entrada):
+    cursor.execute('''
+        CREATE TABLE IF NOT EXISTS datas (
+            data DATETIME NOT NULL,
+            custo REAL NOT NULL
+        )
+    ''')
+    if pagamento == 'À Vista':
+        cursor.execute('''
+            INSERT INTO datas (data, custo)
+            VALUES (?, ?)
+        ''', (data_compra, preco + custos_adicionais))
+    else:
+        cursor.execute('''
+            INSERT INTO datas (data, custo)
+            VALUES (?, ?)
+        ''', (data_pagamento, valor_entrada + custos_adicionais))
+
+    if pagamento != 'À Vista':
+        for i in range(parcelamento):
+            data_parcela = data_pagamento + relativedelta(months=(parcelas_pagas + i)) 
+            cursor.execute('''
+                INSERT INTO datas (data, custo)
+                VALUES (?, ?)
+            ''', (data_parcela, valor_parcela))
+
+    conn.commit()
+
+
 def acesso():
     codigo_de_acesso = st.text_input('Código de Acesso', type='password')
     entrar = st.button('Entrar')
@@ -178,6 +208,9 @@ def coleta():
                 st.success("Compra cadastrada com sucesso!")
             else:
                 st.warning("Preencha todos os campos em branco antes de cadastrar a compra.")
+        if registrar_compra:
+            if campos_preenchidos:        
+                registrar_datas(data_compra, data_pagamento, preco, custos_adicionais, pagamento, parcelamento, valor_parcela, parcelas_pagas, valor_entrada)
             
 def criar_dataframe():
     cursor.execute('SELECT * FROM compras')

@@ -13,7 +13,8 @@ from streamlit import components
 import numpy as np
 
 import altair as alt
-import plotly.express as px
+from plotnine import ggplot, aes, geom_point
+
 
 
 st.set_page_config(page_title='SGN')

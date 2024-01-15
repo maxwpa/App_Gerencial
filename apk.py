@@ -530,6 +530,7 @@ def tabela():
 
 #    return image_stream
 
+
             
 def dashboard():
     if hasattr(st.session_state, 'logged_in') and st.session_state.logged_in:

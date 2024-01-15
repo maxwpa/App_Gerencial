@@ -11,7 +11,8 @@ from dateutil.relativedelta import relativedelta
 #from matplotlib.ticker import FuncFormatter
 from streamlit import components
 import numpy as np
-import plotly as px
+import seaborn as sns
+
 
 
 st.set_page_config(page_title='SGN')

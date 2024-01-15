@@ -11,7 +11,7 @@ from dateutil.relativedelta import relativedelta
 #from matplotlib.ticker import FuncFormatter
 from streamlit import components
 import numpy as np
-import plotly.express as px
+from PIL import Image, ImageDraw
 
 
 st.set_page_config(page_title='SGN')
@@ -352,7 +352,7 @@ def tabela():
 #    produtos_dict = {produto: produto if produto in df_agrupado_top5['produto'].values else 'OUTROS' for produto in df_agrupado['produto']}
     
   
-#    df['produto_agrupado'] = df['produto'].map(produtos_dict)
+#   df['produto_agrupado'] = df['produto'].map(produtos_dict)
 
 #    df_agrupado = df.groupby('produto_agrupado')['custo_final'].sum().reset_index()
 
@@ -530,26 +530,6 @@ def tabela():
 
 #    return image_stream
 
-def plot_pie_chart(df):
-    df_agrupado = df.groupby('produto')['custo_final'].sum().reset_index()
-
-    total_custo = df_agrupado['custo_final'].sum()
-
-    df_agrupado_top5 = df_agrupado.nlargest(4, 'custo_final')
-
-    produtos_dict = {produto: produto if produto in df_agrupado_top5['produto'].values else 'OUTROS' for produto in df_agrupado['produto']}
-  
-    df['produto_agrupado'] = df['produto'].map(produtos_dict)
-
-    df_agrupado = df.groupby('produto_agrupado')['custo_final'].sum().reset_index()
-
-    st.title('Distribuição de Custos')
-
-    for produto, valor in zip(df_agrupado['produto_agrupado'], df_agrupado['custo_final']):
-        st.text(f"{produto}: R${valor:.2f} ({valor / total_custo * 100:.1f}%)")
-
-    # Criar gráfico de pizza com Streamlit
-    st.pie(df_agrupado.set_index('produto_agrupado')['custo_final'])
             
 def dashboard():
     if hasattr(st.session_state, 'logged_in') and st.session_state.logged_in:

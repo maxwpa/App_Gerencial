@@ -11,7 +11,6 @@ from dateutil.relativedelta import relativedelta
 #from matplotlib.ticker import FuncFormatter
 from streamlit import components
 import numpy as np
-from PIL import Image, ImageDraw
 
 
 st.set_page_config(page_title='SGN')
@@ -714,7 +713,7 @@ def dashboard():
                 unsafe_allow_html=True)
 
             
-        plot_pie_chart(df_compras)
+#        plot_pie_chart(df_compras)
             
 #        st.write("<div style='height: 5px;'></div>", unsafe_allow_html=True)
         

@@ -13,7 +13,10 @@ from streamlit import components
 import numpy as np
 
 import altair as alt
-from plotnine import ggplot, aes, geom_point
+
+import dash
+import dash_core_components as dcc
+import dash_html_components as html
 
 
 

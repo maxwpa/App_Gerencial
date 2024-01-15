@@ -12,6 +12,7 @@ from dateutil.relativedelta import relativedelta
 from streamlit import components
 import numpy as np
 import altair as alt
+import matplotlib.pyplot as plt
 
 
 st.set_page_config(page_title='SGN')

@@ -12,6 +12,8 @@ import seaborn as sns
 from matplotlib.ticker import FuncFormatter
 from streamlit import components
 
+st.set_page_config(page_title='SGN')
+
 conn = sqlite3.connect('dados_compras.db')
 cursor = conn.cursor()
     

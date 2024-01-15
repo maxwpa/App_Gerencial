@@ -13,7 +13,8 @@ from streamlit import components
 import numpy as np
 
 import altair as alt
-import holoviews as hv
+from mpl_toolkits.basemap import Basemap
+
 
 
 

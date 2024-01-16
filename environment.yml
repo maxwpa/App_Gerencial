@@ -1,0 +1,7 @@
+name: meu_ambiente
+channels:
+  - defaults
+dependencies:
+  - python=3.8
+  - matplotlib
+  - streamlit

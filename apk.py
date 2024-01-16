@@ -181,7 +181,7 @@ def indice_paginas():
 
         paginas[escolha_pagina]()
         
-        back_image = "https://i.pinimg.com/736x/9f/c3/c1/9fc3c1266d7762facbd4254c4c9024c0.jpg" 
+        back_image = "https://cutewallpaper.org/21/good-wallpaper-for-iphone-6/30-Best-Cool-Retina-iPhone-6-Wallpapers-Backgrounds-in-HD-.jpg" 
     
         page_bg_img = '''
         <style>

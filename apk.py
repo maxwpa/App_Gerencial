@@ -14,7 +14,8 @@ import numpy as np
 
 import altair as alt
 
-import pygraphviz as pgv
+import pyqtgraph as pg
+
 
 
 

@@ -14,6 +14,9 @@ import numpy as np
 
 import altair as alt
 
+import cufflinks as cf
+
+
 
 
 
@@ -384,6 +387,52 @@ def tabela():
 
 #    return image_stream
 
+
+#def plot_pie_chart_altair(df, image_width=400, image_height=400):
+#    df_agrupado = df.groupby('produto')['custo_final'].sum().reset_index()
+    
+#    colors = alt.Color('produto:N', scale=alt.Scale(scheme='category20b'))
+    
+#    total_custo = df_agrupado['custo_final'].sum()
+    
+#    df_agrupado_top5 = df_agrupado.nlargest(4, 'custo_final')
+    
+#    produtos_dict = {produto: produto if produto in df_agrupado_top5['produto'].values else 'OUTROS' for produto in df_agrupado['produto']}
+    
+##    df['produto_agrupado'] = df['produto'].map(produtos_dict)
+    
+##    df_agrupado = df.groupby('produto_agrupado')['custo_final'].sum().reset_index()
+
+##    chart = alt.Chart(df_agrupado).mark_arc().encode(
+##        theta='custo_final:Q',
+##        color=colors,
+##        tooltip=['produto_agrupado:N', 'custo_final:Q']
+##    ).transform_calculate(
+##        Porcentagem='datum.custo_final / ' + str(total_custo)
+##    )
+
+##    labels = alt.Chart(df_agrupado).mark_text(align='center', baseline='middle').encode(
+##        text='produto_agrupado:N',
+##        detail='produto_agrupado:N',
+##        color=alt.value('white'),
+##        tooltip=['produto_agrupado:N', 'Porcentagem:Q'],
+##        angle=alt.value(0),
+##        radius=alt.value(100),
+##    ).transform_calculate(
+##        Porcentagem='datum.custo_final / ' + str(total_custo)
+##    ).properties(width=image_width, height=image_height)
+
+##    chart_final = (chart + labels).configure_view(stroke=None)
+
+##    image_stream = BytesIO()
+##    chart_final.save(image_stream, format='png', scale_factor=2.0, method='selenium', webdriver='chrome', webdriver_options=['--headless', '--disable-gpu', '--no-sandbox'])
+##    image_stream.seek(0)
+
+##    return image_stream
+
+
+
+
 #def quantidade_por_fornecedor_setores(df, image_width=1000, image_height=860):
 #    df_agrupado = df.groupby('fornecedor')['quantidade'].sum().reset_index()
 
@@ -718,7 +767,7 @@ def dashboard():
                 unsafe_allow_html=True)
 
             
-#        plot_pie_chart(df_compras)
+#        plot_pie_chart_altair(df_compras)
             
 #        st.write("<div style='height: 5px;'></div>", unsafe_allow_html=True)
         

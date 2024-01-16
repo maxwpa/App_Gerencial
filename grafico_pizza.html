@@ -20,7 +20,7 @@
   <div id="vis"></div>
   <script>
     (function(vegaEmbed) {
-      var spec = {"config": {"view": {"continuousWidth": 300, "continuousHeight": 300}}, "data": {"name": "data-dbc38a2dbebcadaece6cf044c8d2ca0e"}, "mark": {"type": "circle", "size": 200}, "encoding": {"color": {"field": "Categoria", "type": "nominal"}, "size": {"field": "Valor", "type": "quantitative"}, "tooltip": [{"field": "Categoria", "type": "nominal"}, {"field": "Valor", "type": "quantitative"}], "x": {"value": 0}, "y": {"value": 0}}, "params": [{"name": "param_5", "select": {"type": "interval", "encodings": ["x", "y"]}, "bind": "scales"}], "$schema": "https://vega.github.io/schema/vega-lite/v5.16.3.json", "datasets": {"data-dbc38a2dbebcadaece6cf044c8d2ca0e": [{"Categoria": "A", "Valor": 30}, {"Categoria": "B", "Valor": 20}, {"Categoria": "C", "Valor": 25}, {"Categoria": "D", "Valor": 15}]}};
+      var spec = {"config": {"view": {"continuousWidth": 300, "continuousHeight": 300}}, "data": {"name": "data-dbc38a2dbebcadaece6cf044c8d2ca0e"}, "mark": {"type": "arc"}, "encoding": {"color": {"field": "Categoria", "type": "nominal"}, "theta": {"field": "Valor", "type": "quantitative"}, "tooltip": [{"field": "Categoria", "type": "nominal"}, {"field": "Valor", "type": "quantitative"}]}, "params": [{"name": "param_6", "select": {"type": "interval", "encodings": ["x", "y"]}, "bind": "scales"}], "$schema": "https://vega.github.io/schema/vega-lite/v5.16.3.json", "datasets": {"data-dbc38a2dbebcadaece6cf044c8d2ca0e": [{"Categoria": "A", "Valor": 30}, {"Categoria": "B", "Valor": 20}, {"Categoria": "C", "Valor": 25}, {"Categoria": "D", "Valor": 15}]}};
       var embedOpt = {"mode": "vega-lite"};
 
       function showError(el, error){

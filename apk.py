@@ -1,6 +1,6 @@
 import streamlit as st
 import pandas as pd
-#import matplotlib.pyplot as plt
+import matplotlib.pyplot as plt
 from io import BytesIO
 import base64
 import sqlite3
@@ -13,8 +13,6 @@ from streamlit import components
 import numpy as np
 
 import altair as alt
-
-import folium
 
 
 

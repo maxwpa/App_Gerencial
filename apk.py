@@ -793,7 +793,7 @@ def dashboard():
             image_base64 = base64.b64encode(qtd_fornecedor.getvalue()).decode()
             st.markdown(
                 f"""
-                <div style="border: 3px solid #e2e2e2; border-radius: 5px; padding: 1px; text-align: center; width: 355px; height: 218px; font-family: 'Arial', sans-serif; background-color: #333333; box-shadow: inset 0 0 40px rgba(0, 0, 0, 1)">
+                <div style="border: 3px double #e2e2e2; border-radius: 5px; padding: 1px; text-align: center; width: 355px; height: 218px; font-family: 'Arial', sans-serif; background-color: #333333; box-shadow: inset 0 0 40px rgba(0, 0, 0, 1)">
                     <h2 style="color: #7FFFD4; font-size: 12px; font-weight: bold; margin-bottom: -25px; margin-top: -18px;">Compras por Fornecedor</h2>
                     <img src="data:image/png;base64, {image_base64}" alt="Qtd. Comprada por Fornecedor" style="width: 340px; height: 205px; border-radius: 10px;">
                 </div>
@@ -805,7 +805,7 @@ def dashboard():
         image_base64 = base64.b64encode(custo_meses.getvalue()).decode()
         st.markdown(
                 f"""
-                    <div style="border: 3px solid #e2e2e2; border-radius: 5px; padding: 1px; text-align: center; width: 715px; height: 218px; font-family: 'Arial', sans-serif; background-color: #2F4F4F; box-shadow: inset 0 0 40px rgba(0, 0, 0, 1)">
+                    <div style="border: 3px outset #e2e2e2; border-radius: 5px; padding: 1px; text-align: center; width: 715px; height: 218px; font-family: 'Arial', sans-serif; background-color: #2F4F4F; box-shadow: inset 0 0 40px rgba(0, 0, 0, 1)">
                         <h2 style="color: #7FFFD4; font-size: 12px; font-weight: bold; margin-bottom: -25px; margin-top: -18px;">Gastos por Mês</h2>
                         <img src="data:image/png;base64, {image_base64}" alt="Gasto Total & Quantidade de Contas por Mês" style="width: 780px; height: 205px; border-radius: 10px; margin-left: -30px;">
                     </div>

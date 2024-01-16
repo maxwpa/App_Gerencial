@@ -632,7 +632,7 @@ def dashboard():
             
             pie_chart_stream = plot_pie_chart(df_compras_filtrado)
             qtd_fornecedor = quantidade_por_fornecedor(df_compras_filtrado)
-            #custo_meses = grafico_barras(df_datas_filtrado)
+            custo_meses = grafico_barras(df_datas_filtrado)
 
         else:
             gasto_total = df_compras['custo_final'].sum()
@@ -647,7 +647,7 @@ def dashboard():
             
             pie_chart_stream = plot_pie_chart(df_compras)
             qtd_fornecedor = quantidade_por_fornecedor(df_compras)
-            #custo_meses = grafico_barras(df_datas)
+            custo_meses = grafico_barras(df_datas)
             
         if dias_falta != 'VENCEU':
             if dias_falta == 1:

@@ -347,50 +347,50 @@ def tabela():
             
             
             
-#def plot_pie_chart(df, image_width=1000, image_height=860):
-#    df_agrupado = df.groupby('produto')['custo_final'].sum().reset_index()
+def plot_pie_chart(df, image_width=1000, image_height=860):
+    df_agrupado = df.groupby('produto')['custo_final'].sum().reset_index()
     
-#    colors = plt.cm.Set1.colors
+    colors = plt.cm.Set1.colors
 
-#    fig, ax = plt.subplots(figsize=(image_width / 100, image_height / 140))
+    fig, ax = plt.subplots(figsize=(image_width / 100, image_height / 140))
 
-#    font_size = 20
+    font_size = 20
     
-#    total_custo = df_agrupado['custo_final'].sum()
+    total_custo = df_agrupado['custo_final'].sum()
     
-#    df_agrupado_top5 = df_agrupado.nlargest(4, 'custo_final')
+    df_agrupado_top5 = df_agrupado.nlargest(4, 'custo_final')
 
     
-#    produtos_dict = {produto: produto if produto in df_agrupado_top5['produto'].values else 'OUTROS' for produto in df_agrupado['produto']}
+    produtos_dict = {produto: produto if produto in df_agrupado_top5['produto'].values else 'OUTROS' for produto in df_agrupado['produto']}
     
   
-#   df['produto_agrupado'] = df['produto'].map(produtos_dict)
+   df['produto_agrupado'] = df['produto'].map(produtos_dict)
 
-#    df_agrupado = df.groupby('produto_agrupado')['custo_final'].sum().reset_index()
+    df_agrupado = df.groupby('produto_agrupado')['custo_final'].sum().reset_index()
 
-#    wedges, texts, autotexts = ax.pie(
-#        df_agrupado['custo_final'],
-#        labels=[f"{produto}\n(R${valor:.2f})" for produto, valor in zip(df_agrupado['produto_agrupado'], #df_agrupado['custo_final'])],
-#        autopct=lambda p: '{:.1f}%'.format(p) if p > 5 else '',
-#        startangle=90,
-#        textprops=dict(color="w", size=font_size, weight='bold'),
-#        wedgeprops=dict(width=0.4),
-#        radius=0.9,
-#        colors=colors
-#    )
+    wedges, texts, autotexts = ax.pie(
+        df_agrupado['custo_final'],
+        labels=[f"{produto}\n(R${valor:.2f})" for produto, valor in zip(df_agrupado['produto_agrupado'], df_agrupado['custo_final'])],
+        autopct=lambda p: '{:.1f}%'.format(p) if p > 5 else '',
+        startangle=90,
+        textprops=dict(color="w", size=font_size, weight='bold'),
+        wedgeprops=dict(width=0.4),
+        radius=0.9,
+        colors=colors
+    )
 
-#    ax.axis('equal')
+    ax.axis('equal')
 
-#    for text, autotext in zip(texts, autotexts):
-#        text.set_fontsize(font_size)
-#        autotext.set_fontsize(font_size)
-#        autotext.set_bbox(dict(boxstyle='round,pad=0.3', edgecolor='black', facecolor='black', lw=2))
+    for text, autotext in zip(texts, autotexts):
+        text.set_fontsize(font_size)
+        autotext.set_fontsize(font_size)
+        autotext.set_bbox(dict(boxstyle='round,pad=0.3', edgecolor='black', facecolor='black', lw=2))
 
-#    image_stream = BytesIO()
-#    plt.savefig(image_stream, format='png', transparent=True)
-#    plt.close(fig)
+    image_stream = BytesIO()
+    plt.savefig(image_stream, format='png', transparent=True)
+    plt.close(fig)
 
-#    return image_stream
+    return image_stream
 
 
 #def plot_pie_chart_altair(df, image_width=400, image_height=400):
@@ -481,51 +481,51 @@ def tabela():
 
 #    return image_stream
 
-#def quantidade_por_fornecedor(df, image_width=1000, image_height=860):
-#    df_agrupado = df.groupby('fornecedor')['quantidade'].sum().reset_index()
+def quantidade_por_fornecedor(df, image_width=1000, image_height=860):
+    df_agrupado = df.groupby('fornecedor')['quantidade'].sum().reset_index()
 
-#    colors = plt.cm.Set2.colors
+    colors = plt.cm.Set2.colors
 
-#    fig, ax = plt.subplots(figsize=(image_width / 100, image_height / 140))
+    fig, ax = plt.subplots(figsize=(image_width / 100, image_height / 140))
 
-#    font_size = 20
+    font_size = 20
 
-#    total_quantidade = df_agrupado['quantidade'].sum()
+    total_quantidade = df_agrupado['quantidade'].sum()
 
-#    df_agrupado_top5 = df_agrupado.nlargest(4, 'quantidade')
+    df_agrupado_top5 = df_agrupado.nlargest(4, 'quantidade')
 
-#    fornecedores_dict = {fornecedor: fornecedor if fornecedor in df_agrupado_top5['fornecedor'].values else 'OUTROS' for fornecedor in df_agrupado['fornecedor']}
+    fornecedores_dict = {fornecedor: fornecedor if fornecedor in df_agrupado_top5['fornecedor'].values else 'OUTROS' for fornecedor in df_agrupado['fornecedor']}
     
-#    df['fornecedor_agrupado'] = df['fornecedor'].map(fornecedores_dict)
+    df['fornecedor_agrupado'] = df['fornecedor'].map(fornecedores_dict)
 
-#    df_agrupado = df.groupby('fornecedor_agrupado')['quantidade'].sum().reset_index()
+    df_agrupado = df.groupby('fornecedor_agrupado')['quantidade'].sum().reset_index()
 
-#    bars = ax.barh(df_agrupado['fornecedor_agrupado'], df_agrupado['quantidade'], color=colors)
+    bars = ax.barh(df_agrupado['fornecedor_agrupado'], df_agrupado['quantidade'], color=colors)
 
-#    ax.tick_params(axis='y', labelrotation=0, labelsize=font_size)
-#    ax.tick_params(axis='x', labelsize=font_size)
+    ax.tick_params(axis='y', labelrotation=0, labelsize=font_size)
+    ax.tick_params(axis='x', labelsize=font_size)
 
-#    for i, (fornecedor, quantidade) in enumerate(zip(df_agrupado['fornecedor_agrupado'], df_agrupado['quantidade'])):
-#        ax.text(0, i, f"{fornecedor} ({quantidade})", ha='left', va='center', color='black', fontweight='bold', fontsize=font_size)
+    for i, (fornecedor, quantidade) in enumerate(zip(df_agrupado['fornecedor_agrupado'], df_agrupado['quantidade'])):
+        ax.text(0, i, f"{fornecedor} ({quantidade})", ha='left', va='center', color='black', fontweight='bold', fontsize=font_size)
 
-#    for bar in bars:
-#        percentage = (bar.get_width() / total_quantidade) * 100
-#        ax.text(bar.get_width() + 1, bar.get_y() + bar.get_height()/2, f"{percentage:.1f}%", ha='left', va='center', color='white', fontweight='bold', bbox=dict(facecolor='black', edgecolor='black', boxstyle='round,pad=0.3'), fontsize=font_size)
+    for bar in bars:
+        percentage = (bar.get_width() / total_quantidade) * 100
+        ax.text(bar.get_width() + 1, bar.get_y() + bar.get_height()/2, f"{percentage:.1f}%", ha='left', va='center', color='white', fontweight='bold', bbox=dict(facecolor='black', edgecolor='black', boxstyle='round,pad=0.3'), fontsize=font_size)
 
-#    ax.grid(False)
+    ax.grid(False)
     
-#    ax.spines['top'].set_visible(False)
-#    ax.spines['right'].set_visible(False)
-#    ax.spines['bottom'].set_visible(False)
-#    ax.spines['left'].set_visible(False)
+    ax.spines['top'].set_visible(False)
+    ax.spines['right'].set_visible(False)
+    ax.spines['bottom'].set_visible(False)
+    ax.spines['left'].set_visible(False)
 
-#    ax.tick_params(left=False, bottom=False, labelleft=False, labelbottom=False)
+    ax.tick_params(left=False, bottom=False, labelleft=False, labelbottom=False)
 
-#    image_stream = BytesIO()
-#    plt.savefig(image_stream, format='png', transparent=True)
-#    plt.close(fig)
+    image_stream = BytesIO()
+    plt.savefig(image_stream, format='png', transparent=True)
+    plt.close(fig)
 
-#    return image_stream
+    return image_stream
 
 
 #    monthly_means = df.groupby(df['data'].dt.to_period("M")).agg({'custo': 'mean'}).reset_index()
@@ -630,8 +630,8 @@ def dashboard():
             dias_falta = df_compras_filtrado['proxima_parcela'].min()
             custo_peca = df_compras_filtrado['custo_unitario'].mean()
             
-            #pie_chart_stream = plot_pie_chart(df_compras_filtrado)
-            #qtd_fornecedor = quantidade_por_fornecedor(df_compras_filtrado)
+            pie_chart_stream = plot_pie_chart(df_compras_filtrado)
+            qtd_fornecedor = quantidade_por_fornecedor(df_compras_filtrado)
             #custo_meses = grafico_barras(df_datas_filtrado)
 
         else:
@@ -645,8 +645,8 @@ def dashboard():
             dias_falta = df_compras['proxima_parcela'].min()
             custo_peca = df_compras['custo_unitario'].mean()
             
-            #pie_chart_stream = plot_pie_chart(df_compras)
-            #qtd_fornecedor = quantidade_por_fornecedor(df_compras)
+            pie_chart_stream = plot_pie_chart(df_compras)
+            qtd_fornecedor = quantidade_por_fornecedor(df_compras)
             #custo_meses = grafico_barras(df_datas)
             
         if dias_falta != 'VENCEU':
@@ -774,31 +774,31 @@ def dashboard():
             
 #        plot_pie_chart_altair(df_compras)
             
-#        st.write("<div style='height: 5px;'></div>", unsafe_allow_html=True)
+        st.write("<div style='height: 5px;'></div>", unsafe_allow_html=True)
         
-#        col_c1, col_c2 = st.columns(2)
+        col_c1, col_c2 = st.columns(2)
        
-#        with col_c1:
-#            image_base64 = base64.b64encode(pie_chart_stream.getvalue()).decode()
-#            st.markdown(
-#                f"""
-#                <div style="border: 3px solid #e2e2e2; border-radius: 5px; padding: 1px; text-align: center; width: 355px; height: 218px; font-family: 'Arial', sans-serif; background-color: #1C1C1C; box-shadow: inset 0 0 40px rgba(0, 0, 0, 1)">
-#                    <h2 style="color: #7FFFD4; font-size: 12px; font-weight: bold; margin-bottom: -25px; margin-top: -18px;">Gasto Por Produto</h2>
-#                    <img src="data:image/png;base64, {image_base64}" alt="Gastos Por Produtos" style="width: 340px; height: 205px; border-radius: 10px;">
-#                </div>
-#            """,
-#                unsafe_allow_html=True)
+        with col_c1:
+            image_base64 = base64.b64encode(pie_chart_stream.getvalue()).decode()
+            st.markdown(
+                f"""
+                <div style="border: 3px solid #e2e2e2; border-radius: 5px; padding: 1px; text-align: center; width: 355px; height: 218px; font-family: 'Arial', sans-serif; background-color: #1C1C1C; box-shadow: inset 0 0 40px rgba(0, 0, 0, 1)">
+                    <h2 style="color: #7FFFD4; font-size: 12px; font-weight: bold; margin-bottom: -25px; margin-top: -18px;">Gasto Por Produto</h2>
+                    <img src="data:image/png;base64, {image_base64}" alt="Gastos Por Produtos" style="width: 340px; height: 205px; border-radius: 10px;">
+                </div>
+            """,
+                unsafe_allow_html=True)
         
-#        with col_c2:
-#            image_base64 = base64.b64encode(qtd_fornecedor.getvalue()).decode()
-#            st.markdown(
-#                f"""
-#                <div style="border: 3px solid #e2e2e2; border-radius: 5px; padding: 1px; text-align: center; width: 355px; height: 218px; font-family: 'Arial', sans-serif; background-color: #333333; box-shadow: inset 0 0 40px rgba(0, 0, 0, 1)">
-#                    <h2 style="color: #7FFFD4; font-size: 12px; font-weight: bold; margin-bottom: -25px; margin-top: -18px;">Compras por Fornecedor</h2>
-#                    <img src="data:image/png;base64, {image_base64}" alt="Qtd. Comprada por Fornecedor" style="width: 340px; height: 205px; border-radius: 10px;">
-#                </div>
-#            """,
-#                unsafe_allow_html=True)
+        with col_c2:
+            image_base64 = base64.b64encode(qtd_fornecedor.getvalue()).decode()
+            st.markdown(
+                f"""
+                <div style="border: 3px solid #e2e2e2; border-radius: 5px; padding: 1px; text-align: center; width: 355px; height: 218px; font-family: 'Arial', sans-serif; background-color: #333333; box-shadow: inset 0 0 40px rgba(0, 0, 0, 1)">
+                    <h2 style="color: #7FFFD4; font-size: 12px; font-weight: bold; margin-bottom: -25px; margin-top: -18px;">Compras por Fornecedor</h2>
+                    <img src="data:image/png;base64, {image_base64}" alt="Qtd. Comprada por Fornecedor" style="width: 340px; height: 205px; border-radius: 10px;">
+                </div>
+            """,
+                unsafe_allow_html=True)
         
 #        st.write("<div style='height: 5px;'></div>", unsafe_allow_html=True)
         

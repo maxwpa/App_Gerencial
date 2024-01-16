@@ -232,11 +232,14 @@ def coleta():
 
         data_pagamento = st.date_input('Data do Pagamento À Vista ou Primeira Parcela:', datetime.now().date())
         
+        if 'data_pagamento' not in st.session_state:
+            st.session_state.data_pagamento = datetime.now().date()
+        
         hoje = datetime.now().date()
 
-        par_pagas = relativedelta(hoje, data_pagamento)
+        par_pagas = relativedelta(hoje, st.session_state.data_pagamento)
 
-        if hoje <= data_pagamento:
+        if hoje <= st.session_state.data_pagamento:
             parcelas_pagas = 0
         else:
             parcelas_pagas = par_pagas.years * 12 + par_pagas.months + 1
@@ -270,7 +273,7 @@ def coleta():
         else:
             custo_final = valor_parcela * parcelamento + valor_entrada + custos_adicionais
             if parcelas_restantes > 0:
-                proxima_data = data_pagamento + relativedelta(months=parcelas_pagas)
+                proxima_data = st.session_state.data_pagamento + relativedelta(months=parcelas_pagas)
                 diferenca = proxima_data - hoje
                 proxima_parcela = diferenca.days
             else:

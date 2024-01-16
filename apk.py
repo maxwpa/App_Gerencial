@@ -14,7 +14,8 @@ import numpy as np
 
 import altair as alt
 
-import networkx as nx
+import pygraphviz as pgv
+
 
 
 

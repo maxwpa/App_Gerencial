@@ -686,7 +686,7 @@ def dashboard():
         with col_a3:
             st.markdown(
                 f"""
-                    <div style="border: 3px solid #e2e2e2; border-radius: 5px; padding: 1px; text-align: center; width: 140px; height: 50px; font-family: 'Arial', sans-serif; background-color: #2F4F4F; box-shadow: inset 0 0 40px rgba(0, 0, 0, 1)">
+                    <div style="border: 3px double #e2e2e2; border-radius: 5px; padding: 1px; text-align: center; width: 140px; height: 50px; font-family: 'Arial', sans-serif; background-color: #2F4F4F; box-shadow: inset 0 0 40px rgba(0, 0, 0, 1)">
                         <h2 style="color: #7FFFD4; font-size: 12px; font-weight: bold; margin-bottom: -25px; margin-top: -18px;">Contas à Pagar</h2>
                         <h1 style="color: #F5F5DC; font-size: 25px; font-weight: normal; margin-top: -38px;">R${dividas:.2f}</h1>
                     </div>
@@ -696,7 +696,7 @@ def dashboard():
         with col_a4:
             st.markdown(
                 f"""
-                    <div style="border: 3px solid #e2e2e2; border-radius: 5px; padding: 1px; text-align: center; width: 140px; height: 50px; font-family: 'Arial', sans-serif; background-color: #8B4513; box-shadow: inset 0 0 40px rgba(0, 0, 0, 1)">
+                    <div style="border: 3px ridge #e2e2e2; border-radius: 5px; padding: 1px; text-align: center; width: 140px; height: 50px; font-family: 'Arial', sans-serif; background-color: #8B4513; box-shadow: inset 0 0 40px rgba(0, 0, 0, 1)">
                         <h2 style="color: #7FFFD4; font-size: 12px; font-weight: bold; margin-bottom: -25px; margin-top: -18px;">Qtd. Contas à Pagar</h2>
                         <h1 style="color: #F5F5DC; font-size: 30px; font-weight: normal; margin-top: -40px;">{pagamentos_restantes}</h1>
                     </div>
@@ -706,7 +706,7 @@ def dashboard():
         with col_a5:
             st.markdown(
                 f"""
-                    <div style="border: 3px solid #e2e2e2; border-radius: 5px; padding: 1px; text-align: center; width: 140px; height: 50px; font-family: 'Arial', sans-serif; background-color: #191970; box-shadow: inset 0 0 40px rgba(0, 0, 0, 1)">
+                    <div style="border: 3px groove #e2e2e2; border-radius: 5px; padding: 1px; text-align: center; width: 140px; height: 50px; font-family: 'Arial', sans-serif; background-color: #191970; box-shadow: inset 0 0 40px rgba(0, 0, 0, 1)">
                         <h2 style="color: #7FFFD4; font-size: 12px; font-weight: bold; margin-bottom: -25px; margin-top: -18px;">Próximo Vencimento</h2>
                         <h1 style="color: #F5F5DC; font-size: 20px; font-weight: normal; margin-top: -35px;">{vencimento}</h1>
                     </div>
@@ -720,7 +720,7 @@ def dashboard():
         with col_b1:
             st.markdown(
                 f"""
-                    <div style="border: 3px solid #e2e2e2; border-radius: 5px; padding: 1px; text-align: center; width: 140px; height: 50px; font-family: 'Arial', sans-serif; background-color: #2F4F4F; box-shadow: inset 0 0 40px rgba(0, 0, 0, 1)">
+                    <div style="border: 3px inset #e2e2e2; border-radius: 5px; padding: 1px; text-align: center; width: 140px; height: 50px; font-family: 'Arial', sans-serif; background-color: #2F4F4F; box-shadow: inset 0 0 40px rgba(0, 0, 0, 1)">
                         <h2 style="color: #7FFFD4; font-size: 12px; font-weight: bold; margin-bottom: -25px; margin-top: -18px;">Qtd. Comprada</h2>
                         <h1 style="color: #F5F5DC; font-size: 30px; font-weight: normal; margin-top: -40px;">{qtd_comprada}</h1>
                     </div>
@@ -734,7 +734,7 @@ def dashboard():
                 fonte = 19
             st.markdown(
                 f"""
-                    <div style="border: 3px solid #e2e2e2; border-radius: 5px; padding: 1px; text-align: center; width: 140px; height: 50px; font-family: 'Arial', sans-serif; background-color: #8B4513; box-shadow: inset 0 0 40px rgba(0, 0, 0, 1)">
+                    <div style="border: 3px outset #e2e2e2; border-radius: 5px; padding: 1px; text-align: center; width: 140px; height: 50px; font-family: 'Arial', sans-serif; background-color: #8B4513; box-shadow: inset 0 0 40px rgba(0, 0, 0, 1)">
                         <h2 style="color: #7FFFD4; font-size: 12px; font-weight: bold; margin-bottom: -25px; margin-top: -18px;">Prod. Mais Comprado</h2>
                         <h1 style="color: #F5F5DC; font-size: {fonte}px; font-weight: normal; margin-top: -35px;">{mais_comprado}</h1>
                     </div>

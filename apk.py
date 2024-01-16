@@ -541,52 +541,52 @@ def quantidade_por_fornecedor(df, image_width=1000, image_height=860):
 
 
 
-##def grafico_barras(df, image_width=2000, image_height=886, indice_fontsize=18):
-##    df['data'] = pd.to_datetime(df['data'])
-##    df['custo'] = pd.to_numeric(df['custo'], errors='coerce')
-##    df = df.sort_values(by='data')
+def grafico_barras(df, image_width=2000, image_height=886, indice_fontsize=18):
+    df['data'] = pd.to_datetime(df['data'])
+    df['custo'] = pd.to_numeric(df['custo'], errors='coerce')
+    df = df.sort_values(by='data')
 
-##    fig, ax = plt.subplots(figsize=(image_width/100, image_height/175))
+    fig, ax = plt.subplots(figsize=(image_width/100, image_height/175))
 
-##    total_custo = df.groupby(df['data'].dt.to_period("M")).agg({'custo': 'sum'}).reset_index()
-##    total_custo['data'] = total_custo['data'].dt.to_timestamp() 
+    total_custo = df.groupby(df['data'].dt.to_period("M")).agg({'custo': 'sum'}).reset_index()
+    total_custo['data'] = total_custo['data'].dt.to_timestamp() 
 
-##    ax.bar(total_custo['data'], total_custo['custo'], color='lightgray', label='Total')
+    ax.bar(total_custo['data'], total_custo['custo'], color='lightgray', label='Total')
 
-##    ax.plot(df['data'], df['custo'], color='red', marker='o')
-##    ax.fill_between(df['data'], df['custo'], color='blue', alpha=0.4)
+    ax.plot(df['data'], df['custo'], color='red', marker='o')
+    ax.fill_between(df['data'], df['custo'], color='blue', alpha=0.4)
 
-##    mean_custo = df['custo'].mean()
-##    ax.axhline(y=mean_custo, color='orange', linestyle='--', label=f'Média: R${mean_custo:.2f}')
+    mean_custo = df['custo'].mean()
+    ax.axhline(y=mean_custo, color='orange', linestyle='--', label=f'Média: R${mean_custo:.2f}')
 
-##    for i, row in total_custo.iterrows():
-##        bbox_props = dict(boxstyle="round,pad=0.3", fc="black", ec="black", lw=2)
-##        ax.text(row['data'], row['custo'], f'{row["custo"]:.2f}', ha="center", va="center", bbox=bbox_props, color='white', fontsize=16, fontweight='bold')
+    for i, row in total_custo.iterrows():
+        bbox_props = dict(boxstyle="round,pad=0.3", fc="black", ec="black", lw=2)
+        ax.text(row['data'], row['custo'], f'{row["custo"]:.2f}', ha="center", va="center", bbox=bbox_props, color='white', fontsize=16, fontweight='bold')
 
-##    count_custo = df.groupby(df['data'].dt.to_period("M")).agg({'custo': 'count'}).reset_index()
+    count_custo = df.groupby(df['data'].dt.to_period("M")).agg({'custo': 'count'}).reset_index()
 
-##    for i, row in count_custo.iterrows():
-##        bbox_props = dict(boxstyle="round,pad=0.3", fc="black", ec="black", lw=2)
-##        ax.text(row['data'].to_timestamp(), row['custo'], f'{row["custo"]:.0f}', ha="center", va="center", bbox=bbox_props, color='white', fontsize=16, fontweight='bold')
+    for i, row in count_custo.iterrows():
+        bbox_props = dict(boxstyle="round,pad=0.3", fc="black", ec="black", lw=2)
+        ax.text(row['data'].to_timestamp(), row['custo'], f'{row["custo"]:.0f}', ha="center", va="center", bbox=bbox_props, color='white', fontsize=16, fontweight='bold')
 
-##    plt.xticks(fontweight='bold', color='white', fontsize=18)
+    plt.xticks(fontweight='bold', color='white', fontsize=18)
     #ax.legend()
-##    ax.tick_params(axis='y', labelcolor='white', labelsize=18)
-##    ax.tick_params(axis='y', labelsize=indice_fontsize)
-##    ax.set_yticklabels([f'R${val:.0f}' for val in ax.get_yticks()])
-##    ax.grid(False)
+    ax.tick_params(axis='y', labelcolor='white', labelsize=18)
+    ax.tick_params(axis='y', labelsize=indice_fontsize)
+    ax.set_yticklabels([f'R${val:.0f}' for val in ax.get_yticks()])
+    ax.grid(False)
 
-#    for spine in ax.spines.values():
-#        spine.set_visible(False)
+    for spine in ax.spines.values():
+        spine.set_visible(False)
 
-#    image_stream = BytesIO()
-#    plt.savefig(image_stream, format='png', transparent=True)
-#    image_stream.seek(0)
+    image_stream = BytesIO()
+    plt.savefig(image_stream, format='png', transparent=True)
+    image_stream.seek(0)
 
-#    plt.clf()
-#    plt.close()
+    plt.clf()
+    plt.close()
 
-#    return image_stream
+    return image_stream
 
 
             
@@ -800,18 +800,18 @@ def dashboard():
             """,
                 unsafe_allow_html=True)
         
-#        st.write("<div style='height: 5px;'></div>", unsafe_allow_html=True)
+        st.write("<div style='height: 5px;'></div>", unsafe_allow_html=True)
         
-#        image_base64 = base64.b64encode(custo_meses.getvalue()).decode()
-#        st.markdown(
-#                f"""
-#                    <div style="border: 3px solid #e2e2e2; border-radius: 5px; padding: 1px; text-align: center; width: 715px; height: 218px; font-family: 'Arial', sans-serif; background-color: #2F4F4F; box-shadow: inset 0 0 40px rgba(0, 0, 0, 1)">
-#                        <h2 style="color: #7FFFD4; font-size: 12px; font-weight: bold; margin-bottom: -25px; margin-top: -18px;">Gastos por Mês</h2>
-#                        <img src="data:image/png;base64, {image_base64}" alt="Gasto Total & Quantidade de Contas por Mês" style="width: 780px; height: 205px; border-radius: 10px; margin-left: -30px;">
-#                    </div>
-#                    """,
-#                    unsafe_allow_html=True
-#                )
+        image_base64 = base64.b64encode(custo_meses.getvalue()).decode()
+        st.markdown(
+                f"""
+                    <div style="border: 3px solid #e2e2e2; border-radius: 5px; padding: 1px; text-align: center; width: 715px; height: 218px; font-family: 'Arial', sans-serif; background-color: #2F4F4F; box-shadow: inset 0 0 40px rgba(0, 0, 0, 1)">
+                        <h2 style="color: #7FFFD4; font-size: 12px; font-weight: bold; margin-bottom: -25px; margin-top: -18px;">Gastos por Mês</h2>
+                        <img src="data:image/png;base64, {image_base64}" alt="Gasto Total & Quantidade de Contas por Mês" style="width: 780px; height: 205px; border-radius: 10px; margin-left: -30px;">
+                    </div>
+                    """,
+                    unsafe_allow_html=True
+                )
 
         
 

@@ -14,8 +14,8 @@ import numpy as np
 
 import altair as alt
 
+import vincent
 
-from mayavi import mlab
 
 
 

@@ -666,7 +666,7 @@ def dashboard():
         with col_a1:
             st.markdown(
                 f"""
-                    <div style="border: 3px dashed #e2e2e2; border-radius: 5px; padding: 1px; text-align: center; width: 140px; height: 50px; font-family: 'Arial', sans-serif; background-color: #A52A2A; box-shadow: inset 0 0 40px rgba(0, 0, 0, 1);">
+                    <div style="border: 2px dashed #666666; border-radius: 5px; padding: 1px; text-align: center; width: 140px; height: 50px; font-family: 'Arial', sans-serif; background-color: #A52A2A; box-shadow: inset 0 0 40px rgba(0, 0, 0, 1);">
                         <h2 style="color: #7FFFD4; font-size: 12px; font-weight: bold; margin-bottom: -25px; margin-top: -18px;">Gasto Total</h2>
                         <h1 style="color: #F5F5DC; font-size: 25px; font-weight: normal; margin-top: -38px;">R${gasto_total:.2f}</h1>
                     </div>
@@ -676,7 +676,7 @@ def dashboard():
         with col_a2:
             st.markdown(
                 f"""
-                    <div style="border: 3px dotted #e2e2e2; border-radius: 5px; padding: 1px; text-align: center; width: 140px; height: 50px; font-family: 'Arial', sans-serif; background-color: #556B2F; box-shadow: inset 0 0 40px rgba(0, 0, 0, 1)">
+                    <div style="border: 2px dotted #666666; border-radius: 5px; padding: 1px; text-align: center; width: 140px; height: 50px; font-family: 'Arial', sans-serif; background-color: #556B2F; box-shadow: inset 0 0 40px rgba(0, 0, 0, 1)">
                         <h2 style="color: #7FFFD4; font-size: 12px; font-weight: bold; margin-bottom: -25px; margin-top: -18px;">Total Pago</h2>
                         <h1 style="color: #F5F5DC; font-size: 25px; font-weight: normal; margin-top: -38px;">R${contas_pagas:.2f}</h1>
                     </div>
@@ -686,7 +686,7 @@ def dashboard():
         with col_a3:
             st.markdown(
                 f"""
-                    <div style="border: 3px double #e2e2e2; border-radius: 5px; padding: 1px; text-align: center; width: 140px; height: 50px; font-family: 'Arial', sans-serif; background-color: #2F4F4F; box-shadow: inset 0 0 40px rgba(0, 0, 0, 1)">
+                    <div style="border: 2px double #666666; border-radius: 5px; padding: 1px; text-align: center; width: 140px; height: 50px; font-family: 'Arial', sans-serif; background-color: #2F4F4F; box-shadow: inset 0 0 40px rgba(0, 0, 0, 1)">
                         <h2 style="color: #7FFFD4; font-size: 12px; font-weight: bold; margin-bottom: -25px; margin-top: -18px;">Contas à Pagar</h2>
                         <h1 style="color: #F5F5DC; font-size: 25px; font-weight: normal; margin-top: -38px;">R${dividas:.2f}</h1>
                     </div>
@@ -782,7 +782,7 @@ def dashboard():
             image_base64 = base64.b64encode(pie_chart_stream.getvalue()).decode()
             st.markdown(
                 f"""
-                <div style="border: 3px solid #e2e2e2; border-radius: 5px; padding: 1px; text-align: center; width: 355px; height: 218px; font-family: 'Arial', sans-serif; background-color: #1C1C1C; box-shadow: inset 0 0 40px rgba(0, 0, 0, 1)">
+                <div style="border: 3px solid #666666; border-radius: 5px; padding: 1px; text-align: center; width: 355px; height: 218px; font-family: 'Arial', sans-serif; background-color: #1C1C1C; box-shadow: inset 0 0 40px rgba(0, 0, 0, 1)">
                     <h2 style="color: #7FFFD4; font-size: 12px; font-weight: bold; margin-bottom: -25px; margin-top: -18px;">Gasto Por Produto</h2>
                     <img src="data:image/png;base64, {image_base64}" alt="Gastos Por Produtos" style="width: 340px; height: 205px; border-radius: 10px;">
                 </div>

@@ -364,7 +364,7 @@ def plot_pie_chart(df, image_width=1000, image_height=860):
     produtos_dict = {produto: produto if produto in df_agrupado_top5['produto'].values else 'OUTROS' for produto in df_agrupado['produto']}
     
   
-   df['produto_agrupado'] = df['produto'].map(produtos_dict)
+    df['produto_agrupado'] = df['produto'].map(produtos_dict)
 
     df_agrupado = df.groupby('produto_agrupado')['custo_final'].sum().reset_index()
 

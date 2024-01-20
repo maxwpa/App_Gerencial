@@ -12,20 +12,6 @@ from matplotlib.ticker import FuncFormatter
 from streamlit import components
 import numpy as np
 
-import altair as alt
-
-
-
-
-
-
-
-
-
-
-
-
-
 st.set_page_config(page_title='SGN')
 
 conn = sqlite3.connect('dados_compras.db')
@@ -814,7 +800,17 @@ def dashboard():
                     unsafe_allow_html=True
                 )
 
-        
+        .markdown(
+        """
+        <style>
+            .stButton button {
+                background-color: green;
+            }
+        </style>
+        """,
+        unsafe_allow_html=True
+    )
+        entrar = st.button('Entrar')
 
 conn.commit()
 

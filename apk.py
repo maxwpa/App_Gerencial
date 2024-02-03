@@ -18,7 +18,6 @@ conn = sqlite3.connect('dados_compras.db')
 cursor = conn.cursor()
     
 def registrar_compra():
-    
     cursor.execute('''
         CREATE TABLE IF NOT EXISTS compras (
             id_produto TEXT PRIMARY KEY,

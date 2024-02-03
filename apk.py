@@ -799,18 +799,6 @@ def dashboard():
                     unsafe_allow_html=True
                 )
 
-        .markdown(
-        """
-        <style>
-            .stButton button {
-                background-color: green;
-            }
-        </style>
-        """,
-        unsafe_allow_html=True
-    )
-        entrar = st.button('Entrar')
-
 conn.commit()
 
 if "logged_in" not in st.session_state:

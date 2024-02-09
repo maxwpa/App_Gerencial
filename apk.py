@@ -798,7 +798,7 @@ def dashboard():
                     """,
                     unsafe_allow_html=True
                 )
-        
+
 conn.commit()
 
 if "logged_in" not in st.session_state:
